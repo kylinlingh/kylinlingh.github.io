@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-08-26T06:05:53.726Z</updated>
+  <updated>2019-11-16T11:46:34.110Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,11 +17,55 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Linux下的rawsocket</title>
+    <link href="http://yoursite.com/2019/11/02/Linux%E4%B8%8B%E7%9A%84rawsocket/"/>
+    <id>http://yoursite.com/2019/11/02/Linux下的rawsocket/</id>
+    <published>2019-11-02T03:28:52.000Z</published>
+    <updated>2019-11-16T11:46:34.110Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;数据包在协议栈内的处理流程&quot;&gt;数据包在协议栈内的处理流程&lt;/h3&gt;
+&lt;p&gt;如下图所示，网卡接收到了数据包，在链路层处理完之后会产生两条处理路径：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;第一条路径是继续送到上层的IP和TCP层进行处理，然后送到一般的socket接口（譬如str
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>netlink</title>
+    <link href="http://yoursite.com/2019/09/14/netlink/"/>
+    <id>http://yoursite.com/2019/09/14/netlink/</id>
+    <published>2019-09-14T02:40:00.000Z</published>
+    <updated>2019-09-30T00:14:55.041Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;与内核常用的通信方式&quot;&gt;与内核常用的通信方式&lt;/h2&gt;
+&lt;p&gt;用户态程序与内核态程序进行通信的方式主要有以下几种：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;/proc虚拟文件系统，/proc是linux的一个目录，该目录下存储了内核的运行信息，很多linux查询命令其实都是输出
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>网络拓扑</title>
     <link href="http://yoursite.com/2019/08/26/%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/"/>
     <id>http://yoursite.com/2019/08/26/网络设备/</id>
     <published>2019-08-26T03:23:47.000Z</published>
-    <updated>2019-08-26T06:05:53.726Z</updated>
+    <updated>2019-08-31T08:46:32.015Z</updated>
     
     <summary type="html">
     
@@ -39,8 +83,8 @@
     <title>Hello World</title>
     <link href="http://yoursite.com/2019/08/24/hello-world/"/>
     <id>http://yoursite.com/2019/08/24/hello-world/</id>
-    <published>2019-08-24T09:35:40.690Z</published>
-    <updated>2019-08-24T09:35:40.691Z</updated>
+    <published>2019-08-24T12:57:16.123Z</published>
+    <updated>2019-08-24T12:57:16.123Z</updated>
     
     <summary type="html">
     

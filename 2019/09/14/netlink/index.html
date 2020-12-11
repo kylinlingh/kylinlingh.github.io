@@ -81,13 +81,23 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="与内核常用的通信方式 用户态程序与内核态程序进行通信的方式主要有以下几种：  /proc虚拟文件系统，/proc是linux的一个目录，该目录下存储了内核的运行信息，很多linux查询命令其实都是输出/proc目录下的特定信息。当内核的某个变量保存到了/proc目录下之后，用户可以直接修改该变量的值，就可以改变内核的某个模块的运行逻辑，从而实现用户态与内核态程序通信的目的。 netlink通信，n">
+<meta property="og:type" content="article">
+<meta property="og:title" content="netlink">
+<meta property="og:url" content="http://yoursite.com/2019/09/14/netlink/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="与内核常用的通信方式 用户态程序与内核态程序进行通信的方式主要有以下几种：  /proc虚拟文件系统，/proc是linux的一个目录，该目录下存储了内核的运行信息，很多linux查询命令其实都是输出/proc目录下的特定信息。当内核的某个变量保存到了/proc目录下之后，用户可以直接修改该变量的值，就可以改变内核的某个模块的运行逻辑，从而实现用户态与内核态程序通信的目的。 netlink通信，n">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2019/09/14/netlink/msg.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/14/netlink/netlink_msg_header.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/14/netlink/netlink_msg_body.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/14/netlink/netlink_marco.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/14/netlink/skb_buff.jpg">
+<meta property="og:updated_time" content="2019-09-30T00:14:55.041Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="netlink">
+<meta name="twitter:description" content="与内核常用的通信方式 用户态程序与内核态程序进行通信的方式主要有以下几种：  /proc虚拟文件系统，/proc是linux的一个目录，该目录下存储了内核的运行信息，很多linux查询命令其实都是输出/proc目录下的特定信息。当内核的某个变量保存到了/proc目录下之后，用户可以直接修改该变量的值，就可以改变内核的某个模块的运行逻辑，从而实现用户态与内核态程序通信的目的。 netlink通信，n">
+<meta name="twitter:image" content="http://yoursite.com/2019/09/14/netlink/msg.png">
 
 
 
@@ -117,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://yoursite.com/2019/09/14/netlink/">
 
 
 
 
 
-  <title>Hexo</title>
+  <title>netlink | Hexo</title>
   
 
 
@@ -142,8 +152,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -278,230 +287,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/02/Linux下的rawsocket/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Kylin">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/02/Linux下的rawsocket/" itemprop="url">Linux下的rawsocket</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-02T11:28:52+08:00">
-                2019-11-02
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">更新于&#58;</span>
-              
-              <time title="更新于" itemprop="dateModified" datetime="2019-11-16T19:46:34+08:00">
-                2019-11-16
-              </time>
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="数据包在协议栈内的处理流程">数据包在协议栈内的处理流程</h3>
-<p>如下图所示，网卡接收到了数据包，在链路层处理完之后会产生两条处理路径：</p>
-<ul>
-<li>第一条路径是继续送到上层的IP和TCP层进行处理，然后送到一般的socket接口（譬如stream（TCP)和datagram(UDP) ），此时数据包已经完全去掉了所有协议层的数据包头信息（IP地址，MAC地址等），只剩下了数据负载（payload）；使用stream或datagram类型的socket时，需要指定IP和端口信息，就是为了在IP和TCP层处理数据包时捕获那些满足要求的数据包；</li>
-<li>另一条路径是绕过TCP/IP层的处理，直接送到raw socket（raw socket捕捉到的数据是内核协议栈中数据包的一份拷贝），从而使得应用层可以直接访问完全没有处理过的数据包，从而获取数据包里的包头信息（IP地址，MAC地址等）；注意的是，当网卡设置为“混杂”模式时才会捕获全部到达网卡的数据包，如果设置为“非混杂”模式，则只会捕获目的地址为本机的数据包。
-<img src="/2019/11/02/Linux下的rawsocket/img1.jpg" alt title="raw socket接收数据包的过程"></li>
-</ul>
-<h4 id="网卡对数据帧进行硬过滤-数据链路层过滤">网卡对数据帧进行硬过滤（数据链路层过滤）</h4>
-<p>首先进行数据链路层校验和处理，如果校验和出错，直接扔掉，而不会拷贝给sock_raw套接字；然后根据网卡的模式不同会有不同的动作：如果设置了promisc混杂模式的话，则不做任何过滤直接交给下一层输入例程，否则非本机mac或者广播mac会被直接丢弃。</p>
-<h4 id="向上层递交数据链路层数据帧">向上层递交数据链路层数据帧</h4>
-<p>在进入网络层之前，系统会检查系统中是否有通过socket(AF_PACKET, SOCK_RAW, ...)创建的套接字；如果有并且与指定的协议相符的话，系统就给每个这样的socket接收缓冲区发送一个数据帧拷贝。然后进入网络层。</p>
-<h4 id="网络层过滤">网络层过滤</h4>
-<p>IP层会对该数据包进行软过滤：检查校验或者丢弃非本机IP或者广播IP的数据包等</p>
-<h4 id="向上层递交网络层数据包">向上层递交网络层数据包</h4>
-<p>在进入运输层（如TCP、UDP例程）之前，系统会检查系统中是否有通过socket(AF_INET, SOCK_RAW, ...)创建的套接字；如果有的话并且协议相符，系统就给每个这样的socket接收缓冲区发送一个数据包拷贝（不管在任何情况下，永远都包含IP数据包头）。然后进入运输层。</p>
-<h4 id="运输层处理数据包">运输层处理数据包</h4>
-<p>这一步由系统内核来处理运输层的协议，用户层无法干涉。处理完之后，如果合法，将向用户层递交数据，进而进入用户层处理。</p>
-<h4 id="进入用户层">进入用户层</h4>
-<p>这一层在用户态，由用户应用程序来完成。</p>
-<hr>
-<h3 id="数据包格式">数据包格式</h3>
-<p>下图是数据包的组成
-<img src="/2019/11/02/Linux下的rawsocket/Ethernet-Important-Concept.png" alt title="数据包"></p>
-<h4 id="链路层数据包">链路层数据包</h4>
-<p>链路层的数据包格式如下图所示：
-<img src="/2019/11/02/Linux下的rawsocket/700px-Ethernet_Type_II_Frame_format.png" alt title="以太网包头">
-以太网数据包头由一个结构体来描述</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct ethhdr &#123;</span><br><span class="line">	unsigned char	h_dest[ETH_ALEN];	/* destination eth addr，目的MAC地址	*/</span><br><span class="line">	unsigned char	h_source[ETH_ALEN];	/* source ether addr，源MAC地址	*/</span><br><span class="line">	__be16		h_proto;		/* packet type ID field）	*/</span><br><span class="line">&#125; __attribute__((packed));</span><br></pre></td></tr></table></figure>
-<p>其中，h_proto指明了下一层协议的编号，如果其值为0x800(ETH_P_IP)，就表明下一层的数据包头是IP数据包的包头</p>
-<h4 id="网络层数据包">网络层数据包</h4>
-<p>ip数据包首部的结构如下图所示：
-<img src="/2019/11/02/Linux下的rawsocket/ipheader.png" alt title="ip数据包包头">
-由下面的结构体定义（ip.h）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">struct iphdr &#123;</span><br><span class="line">#if defined(__LITTLE_ENDIAN_BITFIELD)</span><br><span class="line">	__u8	ihl:4,</span><br><span class="line">		version:4;</span><br><span class="line">#elif defined (__BIG_ENDIAN_BITFIELD)</span><br><span class="line">	__u8	version:4, //IPV4</span><br><span class="line">  		ihl:4; // 首部长度，单位：4字节(注意这里的单位，如果要得到整个ip首部的长度，计算公式为:ihl*4)</span><br><span class="line">#else</span><br><span class="line">#error	&quot;Please fix &lt;asm/byteorder.h&gt;&quot;</span><br><span class="line">#endif</span><br><span class="line">	__u8	tos;    // type of service，服务类型</span><br><span class="line">	__be16	tot_len; // 总长度：首部及数据之和的长度</span><br><span class="line">	__be16	id; // 每产生一个数据报，其值加1，分片后的数据包具有同样的id</span><br><span class="line">	__be16	frag_off; // 片偏移，某片在原分组中的相对位置.也就是说,相对用户数据字段的起点,该片从何处开始.</span><br><span class="line">	__u8	ttl;</span><br><span class="line">	__u8	protocol; // 上层协议号，以便使目的主机的IP层知道应将数据部分上交给哪个处理过程，6（TCP），17（UDP）</span><br><span class="line">	__sum16	check;</span><br><span class="line">	__be32	saddr;</span><br><span class="line">	__be32	daddr;</span><br><span class="line">	/*The options start here. */</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h4 id="运输层数据包">运输层数据包</h4>
-<p>运输层的协议有很多种，本文主要分析TCP和UDP，下图所示为TCP首部的格式：
-<img src="/2019/11/02/Linux下的rawsocket/tcpheader.png" alt title="tcp数据包首部"></p>
-<p>TCP的数据报首部在tcp.h文件中定义：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">struct tcphdr &#123;</span><br><span class="line">	__be16	source;</span><br><span class="line">	__be16	dest;</span><br><span class="line">	__be32	seq;</span><br><span class="line">	__be32	ack_seq;</span><br><span class="line">#if defined(__LITTLE_ENDIAN_BITFIELD)</span><br><span class="line">	__u16	res1:4,</span><br><span class="line">		doff:4,</span><br><span class="line">		fin:1,</span><br><span class="line">		syn:1,</span><br><span class="line">		rst:1,</span><br><span class="line">		psh:1,</span><br><span class="line">		ack:1,</span><br><span class="line">		urg:1,</span><br><span class="line">		ece:1,</span><br><span class="line">		cwr:1;</span><br><span class="line">#elif defined(__BIG_ENDIAN_BITFIELD)</span><br><span class="line">	__u16	doff:4,</span><br><span class="line">		res1:4,</span><br><span class="line">		cwr:1,</span><br><span class="line">		ece:1,</span><br><span class="line">		urg:1,</span><br><span class="line">		ack:1,</span><br><span class="line">		psh:1,</span><br><span class="line">		rst:1,</span><br><span class="line">		syn:1,</span><br><span class="line">		fin:1;</span><br><span class="line">#else</span><br><span class="line">#error	&quot;Adjust your &lt;asm/byteorder.h&gt; defines&quot;</span><br><span class="line">#endif	</span><br><span class="line">	__be16	window; // 此字段用来进行流量控制.单位为字节数,这个值是本机期望一次接收的字节数,源主机可以利用接收到的窗口值决定下一个报文段的大小</span><br><span class="line">	__sum16	check;</span><br><span class="line">	__be16	urg_ptr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>udp数据报首部的格式如下图所示：
-<img src="/2019/11/02/Linux下的rawsocket/udpheader.png" alt title="udp数据包首部">
-UDP数据报首部在udp.h文件中定义：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct udphdr &#123;</span><br><span class="line">	__be16	source;</span><br><span class="line">	__be16	dest;</span><br><span class="line">	__be16	len;</span><br><span class="line">	__sum16	check;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<hr>
-<h3 id="编写raw-socket">编写raw socket</h3>
-<p>raw socket的函数原型是：socket(int socket_family, int socket_type, int protocol);</p>
-<p>一共有三种方式来创建raw socket</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">socket(AF_INET, SOCK_RAW, IPPROTO_XXX)           // 发送、接收网络层IP数据包，</span><br><span class="line">socket(AF_PACKET/PF_PACKET, SOCK_RAW, htons(ETH_P_XXX))    // 发送、接收数据链路层数据帧（目前只有Linux支持）</span><br><span class="line">socket(AF_INET, SOCK_PACKET, htons(ETH_P_XXX))   // 过时了</span><br></pre></td></tr></table></figure>
-<p>下面分别讨论前两种方式的raw socket：</p>
-<ul>
-<li>
-<p><strong>第一种</strong>，socket(AF_INET, SOCK_RAW, IPPROTO_XXX)；这个socket比较适合写ping程序</p>
-<ul>
-<li>这个SOCKET接收的数据是包含IP头的IP数据包（不管protocol是任何协议），并且是已经重组好的IP包（协议类型为IPPROTO_XXX且发往本机的IP数据包）。</li>
-<li>注意：<strong>不能捕获目的IP非本机的数据包（在网络层会被过滤掉），也不能捕获从本机发送的数据包</strong></li>
-<li>如果protocol是IPPROTO_RAW(255)，这时候，这个socket只能用来发送IP包，而不能接收任何的数据。发送的数据需要自己填充IP包头，并且自己计算校验和</li>
-<li>对于protocol为0（IPPROTO_IP)的raw socket。用于接收任何的IP数据包。其中的校验和和协议分析由程序自己完成。</li>
-<li>如果protocol既不是0也不是255，那么sock_raw既可以接收数据包，也可以发送数据包。</li>
-<li>如果 raw socket 没有使用 connect 函数绑定对方地址时，则应使用 sendto 或 sendmsg 函数来发送数据包，在函数参数中指定对方地址。如果使用了 connect 函数，则可以直接使用 send、write 或 writev 函数来发送数据包。</li>
-<li>如果 raw socket 调用了 bind 函数，则发送数据包的源 IP 地址将是 bind 函数指定的地址。否则，内核将以发接口的主 IP 地址填充；如果设置了 IP_HDRINCL 选项，则必须手工填充每个发送数据包的源 IP 地址。</li>
-</ul>
-</li>
-<li>
-<p><strong>第二种</strong>，socket(PF_PACKET, SOCK_RAW, htons(ETH_P_XXX))；</p>
-<ul>
-<li>这种套接字可以监听网卡上的所有数据帧，可以接收三种类型的数据帧：
-<ul>
-<li>发往本地mac的数据帧</li>
-<li>从本机发送出去的数据帧(第3个参数需要设置为 ETH_P_ALL)</li>
-<li>非发往本地mac的数据帧(网卡需要设置为 promisc 混杂模式)</li>
-</ul>
-</li>
-<li>协议类型一共有四个：
-<ul>
-<li>ETH_P_IP   0x800     只接收发往本机mac的IP类型的数据帧</li>
-<li>ETH_P_ARP  0x806     只接收发往本机mac的ARP类型的数据帧</li>
-<li>ETH_P_ARP  0x8035    只接收发往本机mac的RARP类型的数据帧</li>
-<li>ETH_P_ALL  0x3       接收发往本机mac的所有类型（IP、ARP、RARP）的数据帧，并接收从本机发出的所有类型的数据帧（混杂模式打开的情况下，会接收到非发往本地mac的数据帧）</li>
-</ul>
-</li>
-<li>发送数据帧，需要自己组织整个以太网数据帧，所有相关的地址使用struct sockaddr_ll,而不是struct sockaddr_in（因为协议簇是PF_PACKET，不是AF_INET了）。</li>
-</ul>
-</li>
-</ul>
-<h4 id="网络嗅探">网络嗅探</h4>
-<p>下面尝试通过raw socket来实现一个网络嗅探工具的功能（类似于tcpdump），需要注意的是，只有root用户才能使用raw socket。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">#include&lt;string.h&gt;</span><br><span class="line">#include&lt;stdlib.h&gt;</span><br><span class="line">#include&lt;unistd.h&gt;</span><br><span class="line"></span><br><span class="line">#include&lt;linux/if_ether.h&gt;</span><br><span class="line"></span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">#include&lt;netinet/tcp.h&gt;</span><br><span class="line">#include&lt;netinet/ip.h&gt;</span><br><span class="line">#include&lt;netinet/udp.h&gt;</span><br><span class="line">#include &lt;netinet/in.h&gt;</span><br><span class="line">#include &lt;arpa/inet.h&gt;</span><br><span class="line"></span><br><span class="line">int sock_r;</span><br><span class="line">unsigned char *buffer;</span><br><span class="line">struct result &#123;</span><br><span class="line">    char * nextlayer;</span><br><span class="line">    int nextprotocl;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int recvMsg();</span><br><span class="line">void parseEthHeader(unsigned char *, struct result *);</span><br><span class="line">void parseIpHeader(unsigned char *, struct result *);</span><br><span class="line">void parseTCPHeader(unsigned char *, struct result *);</span><br><span class="line">void parseUDPHeader(unsigned char *, struct result *);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    sock_r = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL)); // 协议簇以 PF_ 开头，地址簇以 AF_ 开头，最好还是使用地址簇最好</span><br><span class="line">    if (sock_r &lt; 0)&#123;</span><br><span class="line">        printf(&quot;error in socket\n&quot;);</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    unsigned char *iplayerHeader;</span><br><span class="line">    unsigned char *translayerHeader;</span><br><span class="line">    struct result nextlayer;</span><br><span class="line"></span><br><span class="line">    while(1)&#123;</span><br><span class="line">        recvMsg();</span><br><span class="line">        parseEthHeader(buffer, &amp;nextlayer);</span><br><span class="line">        parseIpHeader(nextlayer.nextlayer, &amp;nextlayer);</span><br><span class="line">        if(nextlayer.nextprotocl == 6)&#123;</span><br><span class="line">            parseTCPHeader(nextlayer.nextlayer, &amp;nextlayer);</span><br><span class="line">        &#125; else if (nextlayer.nextprotocl == 17)&#123;</span><br><span class="line">            parseUDPHeader(nextlayer.nextlayer, &amp;nextlayer);</span><br><span class="line">        &#125;</span><br><span class="line">        printf(&quot;\n&quot;);</span><br><span class="line">        //sleep(1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int recvMsg() &#123;</span><br><span class="line">    buffer = (unsigned char *) malloc(65536);</span><br><span class="line">    memset(buffer, 0, 65536);</span><br><span class="line">    </span><br><span class="line">    struct sockaddr saddr;</span><br><span class="line">    int saddr_len = sizeof(saddr);</span><br><span class="line">    int buflen;</span><br><span class="line"></span><br><span class="line">    buflen = recvfrom(sock_r, buffer, 65536, 0, &amp;saddr,(socklen_t *)&amp;saddr_len);</span><br><span class="line">    if (buflen &lt; 0)&#123;</span><br><span class="line">        printf(&quot;error in reading recvfrom function\n&quot;);</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void parseEthHeader(unsigned char *buffer, struct result *nextLayerMsg) &#123;</span><br><span class="line">    struct ethhdr *eth = (struct ethhdr*)(buffer);</span><br><span class="line">    printf(&quot;Ethernet Header\n&quot;);</span><br><span class="line">    printf(&quot;\t|-Source address:%.2X-%.2X-%.2X-%.2X-%.2X-%.2X\n&quot;, eth-&gt;h_source[0], eth-&gt;h_source[1],eth-&gt;h_source[2],eth-&gt;h_source[3],eth-&gt;h_source[4],eth-&gt;h_source[5]);</span><br><span class="line">    printf(&quot;\t|-Destination address:%.2X-%.2X-%.2X-%.2X-%.2X-%.2X\n&quot;,eth-&gt;h_dest[0],eth-&gt;h_dest[1],eth-&gt;h_dest[2],eth-&gt;h_dest[3],eth-&gt;h_dest[4],eth-&gt;h_dest[5]);</span><br><span class="line">    printf(&quot;\t|-Protocol:%d\n&quot;, eth-&gt;h_proto);</span><br><span class="line"></span><br><span class="line">    unsigned char *nextlayerheader;</span><br><span class="line">    nextlayerheader = buffer + sizeof(struct ethhdr);</span><br><span class="line">    nextLayerMsg-&gt;nextlayer = nextlayerheader;</span><br><span class="line">    nextLayerMsg-&gt;nextprotocl = eth-&gt;h_proto;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void parseIpHeader(unsigned char *buffer, struct result *nextLayerMsg)&#123;</span><br><span class="line">    unsigned short iphdrlen;</span><br><span class="line">    struct iphdr *ip = (struct iphdr*)(buffer);</span><br><span class="line">    </span><br><span class="line">    iphdrlen = ip-&gt;ihl*4;</span><br><span class="line">    struct sockaddr_in source, dst;</span><br><span class="line">    memset(&amp;source, 0, sizeof(source));</span><br><span class="line">    source.sin_addr.s_addr = ip-&gt;saddr;</span><br><span class="line">    memset(&amp;dst, 0, sizeof(dst));</span><br><span class="line">    dst.sin_addr.s_addr = ip-&gt;daddr;</span><br><span class="line"></span><br><span class="line">    printf(&quot;  Ip Header\n&quot;);</span><br><span class="line">    printf(&quot;\t|-Version: %d\n&quot;, (unsigned int)ip-&gt;version);</span><br><span class="line">    printf(&quot;\t|-Type of service: %d\n&quot;, (unsigned int)ip-&gt;tos);</span><br><span class="line">    printf(&quot;\t|-Protocol: %d\n&quot;, (unsigned int)ip-&gt;protocol);</span><br><span class="line">    printf(&quot;\t|-Source IP: %s\n&quot;, inet_ntoa(source.sin_addr));</span><br><span class="line">    printf(&quot;\t|-Destination IP: %s\n&quot;, inet_ntoa(dst.sin_addr));</span><br><span class="line"></span><br><span class="line">    unsigned char *nextlayerheader;</span><br><span class="line">    nextlayerheader = buffer + sizeof(struct ethhdr) + iphdrlen;</span><br><span class="line"></span><br><span class="line">    nextLayerMsg-&gt;nextlayer = nextlayerheader;</span><br><span class="line">    nextLayerMsg-&gt;nextprotocl = ip-&gt;protocol;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void parseTCPHeader(unsigned char *buffer, struct result *nextLayerMsg)&#123;</span><br><span class="line">    struct tcphdr *tcpHeader = (struct tcphdr *)buffer;</span><br><span class="line">    printf(&quot;    TCP Header\n&quot;);</span><br><span class="line">    printf(&quot;\t|-Source Port: %d\n&quot;, ntohs(tcpHeader-&gt;source));</span><br><span class="line">    printf(&quot;\t|-Destination Port: %d\n&quot;, ntohs(tcpHeader-&gt;dest));</span><br><span class="line">    printf(&quot;\t|-Sequence Number: %d\n&quot;, ntohl(tcpHeader-&gt;seq));</span><br><span class="line">    printf(&quot;\t|-Ack Sequence: %d\n&quot;, ntohl(tcpHeader-&gt;ack_seq));</span><br><span class="line">    printf(&quot;\t|-Window size: %d\n&quot;, ntohl(tcpHeader-&gt;window));</span><br><span class="line">    </span><br><span class="line">    unsigned char * nextlayerheader;</span><br><span class="line">    nextlayerheader = buffer + sizeof(struct tcphdr);</span><br><span class="line">    nextLayerMsg-&gt;nextlayer = nextlayerheader;</span><br><span class="line">    nextLayerMsg-&gt;nextprotocl = -1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void parseUDPHeader(unsigned char *buffer, struct result *nextLayerMsg)&#123;</span><br><span class="line">    struct udphdr *udpHeader = (struct udphdr *)buffer;</span><br><span class="line">    printf(&quot;    UDP Header\n&quot;);</span><br><span class="line">    printf(&quot;\t|-Source Port: %d\n&quot;, ntohs(udpHeader-&gt;source));</span><br><span class="line">    printf(&quot;\t|-Destination Port: %d\n&quot;, ntohs(udpHeader-&gt;dest));</span><br><span class="line">    printf(&quot;\t|-Checksum: %d\n&quot;, ntohs(udpHeader-&gt;check));</span><br><span class="line"></span><br><span class="line">    unsigned char * nextlayerheader;</span><br><span class="line">    nextlayerheader = buffer + sizeof(struct udphdr);</span><br><span class="line">    nextLayerMsg-&gt;nextlayer = nextlayerheader;</span><br><span class="line">    nextLayerMsg-&gt;nextprotocl = -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="封装发包">封装发包</h4>
-<p>下面使用raw socket来封装并发送数据包</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
 
   
 
@@ -531,9 +319,7 @@ UDP数据报首部在udp.h文件中定义：</p>
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/14/netlink/" itemprop="url">netlink</a></h1>
+          <h1 class="post-title" itemprop="name headline">netlink</h1>
         
 
         <div class="post-meta">
@@ -571,11 +357,26 @@ UDP数据报首部在udp.h文件中定义：</p>
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/09/14/netlink/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2019/09/14/netlink/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
           
 
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
           
 
           
@@ -595,9 +396,7 @@ UDP数据报首部在udp.h文件中定义：</p>
       
 
       
-        
-          
-            <h2 id="与内核常用的通信方式">与内核常用的通信方式</h2>
+        <h2 id="与内核常用的通信方式">与内核常用的通信方式</h2>
 <p>用户态程序与内核态程序进行通信的方式主要有以下几种：</p>
 <ul>
 <li>/proc虚拟文件系统，/proc是linux的一个目录，该目录下存储了内核的运行信息，很多linux查询命令其实都是输出/proc目录下的特定信息。当内核的某个变量保存到了/proc目录下之后，用户可以直接修改该变量的值，就可以改变内核的某个模块的运行逻辑，从而实现用户态与内核态程序通信的目的。</li>
@@ -813,8 +612,6 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
 
 ## 内核模块的命令</code></pre>
 
-          
-        
       
     </div>
     
@@ -831,199 +628,32 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/26/网络设备/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Kylin">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/26/网络设备/" itemprop="url">网络拓扑</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-26T11:23:47+08:00">
-                2019-08-26
-              </time>
+              <a href="/2019/08/26/网络设备/" rel="next" title="网络拓扑">
+                <i class="fa fa-chevron-left"></i> 网络拓扑
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-              <span class="post-meta-divider">|</span>
+              <a href="/2019/11/02/Linux下的rawsocket/" rel="prev" title="Linux下的rawsocket">
+                Linux下的rawsocket <i class="fa fa-chevron-right"></i>
+              </a>
             
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">更新于&#58;</span>
-              
-              <time title="更新于" itemprop="dateModified" datetime="2019-08-31T16:46:32+08:00">
-                2019-08-31
-              </time>
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <p><a href="https://mp.weixin.qq.com/s?__biz=MjM5MTM3MzIzMg==&amp;mid=209513316&amp;idx=1&amp;sn=e5dbd9a2ccccb88d0ee5c4d5790699c1#rd" target="_blank" rel="noopener">原文链接</a></p>
-<h1>网络设备</h1>
-<h2 id="中继器">中继器</h2>
-<pre><code>+ 协议栈中的位置：物理层
-+ 作用：对网线上的信号进行中继和放大，实现信号在网线上的远距离传输
-</code></pre>
-<h2 id="集线器">集线器</h2>
-<pre><code>协议栈中的位置：物理层
-作用：中继器只有两个接口，而集线器就是一个多口中继器
-弊端：从任意接口收到的数据，都会往其他所有接口泛洪，因为集线器不能识别数据包的寻址信息和上层内容，无法对终端主机进行隔离，使得所有的主机都处于同一个冲突域中，导致网络带宽利用率低
-</code></pre>
-<h2 id="网桥">网桥</h2>
-<pre><code>协议栈中的位置：链路层
-改进对象：集线器的泛洪问题
-作用：记录终端主机的MAC地址并生成MAC表，网桥根据MAC表转发主机之间的数据流；因此能够隔离冲突域( ![](网络设备/bridge.png)，例如PC1发往PC2的数据不会转发到E2接口 )
-弊端：接口有限，默认只有两个接口，可隔离的冲突域数量有限
-</code></pre>
-<h2 id="交换机">交换机</h2>
-<pre><code>协议栈中的位置：链路层
-功能：记录终端主机的MAC地址并生成MAC表，交换机根据MAC表转发主机之间的数据流；
-改进：交换机是在网桥的基础上进行延伸和升级，相比于网桥，有以下几个优势：
-- 接口数量更加密集，每个主机都在独立的冲突域
-- 使用ASIC硬件芯片进行高速转发
-- 能够进行VLAN隔离（不仅可以隔离冲突域，还可以通过VLAN隔离广播域）
-交换机是局域网设备，无法实现远程广域网通信
-</code></pre>
-<h2 id="路由器">路由器</h2>
-<pre><code>协议栈中的位置：网络层
-改进：
-功能：基于IP寻址，采用路由表实现数据转发；用于连接不同的局域网，实现广播域隔离
-</code></pre>
-<h2 id="ac-access-point-无线路由器">AC（Access Point，无线路由器）</h2>
-<pre><code>协议栈中的位置：
-功能：可以看做是无线功能的交换机/路由器
-功能：
-</code></pre>
-<h1>网络架构</h1>
-<h2 id="家庭网络">家庭网络</h2>
-<pre><code>网络拓扑：通过无线路由器提供WIFI热点接入，并提供路由器连接到外网
-设备：无线路由器
-所用技术：WIFI，NAT，PPPOE，DHCP
-</code></pre>
-<h2 id="小型创业公司">小型创业公司</h2>
-<pre><code>网络拓扑：采用两层架构，单核心拓扑
-设备：路由器，交换机，服务器
-所用技术：VLAN，TRUNK，DHCP，WLAN，静态路由/OSPF，PPPOE，NAT，ACL
-</code></pre>
-<h2 id="园区网络-大中型企业-校园网">园区网络（大中型企业，校园网）</h2>
-<pre><code>网络拓扑：采用 接入-汇聚-核心 三层架构，双核心网络。根据网络需求，分为用户区，对内服务区，对外服务区，管理区，互联网区等，通过核心交换机和防火墙进行连接和隔离。互联网采用多出口连接，通过路由器进行拨号和NAT，通过流控产品进行负载均衡/上网行为管理，通过防火墙进行安全隔离
-设备：路由器，交换机，无线AC/AP，防火墙，负载均衡器/行为管理，服务器
-技术：VLAN，TRUNK，MSTP，HSRP/VRRP，Etherchannel，WLAN，NAT，ACL，PPPOE，SNMP
-</code></pre>
-<h2 id="数据中心-idc">数据中心/IDC</h2>
-<pre><code>网络拓扑：采用两层架构，主要分为租户区（服务器集群），互联网区，安全管理区，其中租户区采用设备虚拟化和链路虚拟化技术，将设备处理能力和链路承载能力提高，并且在服务器区放置负载均衡器，将流量合理有效分配到固定的服务器上。互联网出口区采用路由器执行BGP和地址翻转，采用IPS/防DDOS设备防止大流量泛洪攻击，采用流控执行出口负载，采用防火墙进行安全隔离。安全管理区通过防火墙进行安全接入，通过审计，日志，入侵检测，网管等产品进行全网安全管理
-设备：路由器，交换机，负载均衡器，防火墙，入侵检测/入侵防御，网络审计，防DDOS，服务器
-技术：VLAN,TRUNK,vPC,IRF,LISP,Vxlan,TRILL,FarbriPath,BGP,MPLS,SNMP等</code></pre>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -1033,155 +663,11 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/24/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Kylin">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/24/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-24T20:57:16+08:00">
-                2019-08-24
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">更新于&#58;</span>
-              
-              <time title="更新于" itemprop="dateModified" datetime="2019-08-24T20:57:16+08:00">
-                2019-08-24
-              </time>
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="quick-start">Quick Start</h2>
-<h3 id="create-a-new-post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="run-server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="generate-static-files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="deploy-to-remote-sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -1189,6 +675,17 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
 
 
           
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
 
         </div>
         
@@ -1209,8 +706,17 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -1299,6 +805,22 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#与内核常用的通信方式"><span class="nav-number">1.</span> <span class="nav-text">与内核常用的通信方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#netlink简介"><span class="nav-number">2.</span> <span class="nav-text">netlink简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据结构"><span class="nav-number">3.</span> <span class="nav-text">数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#消息头数据结构"><span class="nav-number">3.1.</span> <span class="nav-text">消息头数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息体数据结构"><span class="nav-number">3.2.</span> <span class="nav-text">消息体数据结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户态程序"><span class="nav-number">4.</span> <span class="nav-text">用户态程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-创建socket"><span class="nav-number">4.1.</span> <span class="nav-text">1.创建socket</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-创建netlink-socket地址"><span class="nav-number">4.2.</span> <span class="nav-text">2.创建netlink socket地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-填充netlink消息头"><span class="nav-number">4.3.</span> <span class="nav-text">3.填充netlink消息头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-填充netlink消息体"><span class="nav-number">4.4.</span> <span class="nav-text">4.填充netlink消息体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-发送消息并接收ack"><span class="nav-number">4.5.</span> <span class="nav-text">5.发送消息并接收ACK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-接收内核返回的消息"><span class="nav-number">4.6.</span> <span class="nav-text">6.接收内核返回的消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-关闭netlink套接字"><span class="nav-number">4.7.</span> <span class="nav-text">7.关闭netlink套接字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-总结"><span class="nav-number">4.8.</span> <span class="nav-text">8.总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内核态程序"><span class="nav-number">5.</span> <span class="nav-text">内核态程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-创建内核态socket"><span class="nav-number">5.1.</span> <span class="nav-text">1.创建内核态socket</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-回调函数"><span class="nav-number">5.2.</span> <span class="nav-text">2.回调函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-创建并填充sk-buff"><span class="nav-number">5.3.</span> <span class="nav-text">3.创建并填充sk_buff</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1452,6 +974,10 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -1498,6 +1024,30 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
 
     
 
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'kylinlingh',
+            repo: 'gitment-blog',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '0a8c96148f979276e18c3c6eeb20cc90efc9dea9',
+            
+                client_id: '4f0d0cb9922a37f8ebdf'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
     
 
 

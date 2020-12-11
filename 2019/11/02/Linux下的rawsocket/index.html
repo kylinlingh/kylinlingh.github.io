@@ -73,6 +73,8 @@
 
 
 
+  
+
 
   <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
 
@@ -81,13 +83,24 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="数据包在协议栈内的处理流程 如下图所示，网卡接收到了数据包，在链路层处理完之后会产生两条处理路径：  第一条路径是继续送到上层的IP和TCP层进行处理，然后送到一般的socket接口（譬如stream（TCP)和datagram(UDP) ），此时数据包已经完全去掉了所有协议层的数据包头信息（IP地址，MAC地址等），只剩下了数据负载（payload）；使用stream或datagram类型的so">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux下的rawsocket">
+<meta property="og:url" content="http://yoursite.com/2019/11/02/Linux下的rawsocket/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="数据包在协议栈内的处理流程 如下图所示，网卡接收到了数据包，在链路层处理完之后会产生两条处理路径：  第一条路径是继续送到上层的IP和TCP层进行处理，然后送到一般的socket接口（譬如stream（TCP)和datagram(UDP) ），此时数据包已经完全去掉了所有协议层的数据包头信息（IP地址，MAC地址等），只剩下了数据负载（payload）；使用stream或datagram类型的so">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2019/11/02/Linux下的rawsocket/img1.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/11/02/Linux下的rawsocket/Ethernet-Important-Concept.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/02/Linux下的rawsocket/700px-Ethernet_Type_II_Frame_format.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/02/Linux下的rawsocket/ipheader.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/02/Linux下的rawsocket/tcpheader.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/02/Linux下的rawsocket/udpheader.png">
+<meta property="og:updated_time" content="2019-11-16T11:46:34.110Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="Linux下的rawsocket">
+<meta name="twitter:description" content="数据包在协议栈内的处理流程 如下图所示，网卡接收到了数据包，在链路层处理完之后会产生两条处理路径：  第一条路径是继续送到上层的IP和TCP层进行处理，然后送到一般的socket接口（譬如stream（TCP)和datagram(UDP) ），此时数据包已经完全去掉了所有协议层的数据包头信息（IP地址，MAC地址等），只剩下了数据负载（payload）；使用stream或datagram类型的so">
+<meta name="twitter:image" content="http://yoursite.com/2019/11/02/Linux下的rawsocket/img1.jpg">
 
 
 
@@ -117,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://yoursite.com/2019/11/02/Linux下的rawsocket/">
 
 
 
 
 
-  <title>Hexo</title>
+  <title>Linux下的rawsocket | Hexo</title>
   
 
 
@@ -142,8 +155,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -278,9 +290,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -310,9 +322,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/02/Linux下的rawsocket/" itemprop="url">Linux下的rawsocket</a></h1>
+          <h1 class="post-title" itemprop="name headline">Linux下的rawsocket</h1>
         
 
         <div class="post-meta">
@@ -350,11 +360,26 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/02/Linux下的rawsocket/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2019/11/02/Linux下的rawsocket/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
           
 
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
           
 
           
@@ -374,9 +399,7 @@
       
 
       
-        
-          
-            <h3 id="数据包在协议栈内的处理流程">数据包在协议栈内的处理流程</h3>
+        <h3 id="数据包在协议栈内的处理流程">数据包在协议栈内的处理流程</h3>
 <p>如下图所示，网卡接收到了数据包，在链路层处理完之后会产生两条处理路径：</p>
 <ul>
 <li>第一条路径是继续送到上层的IP和TCP层进行处理，然后送到一般的socket接口（譬如stream（TCP)和datagram(UDP) ），此时数据包已经完全去掉了所有协议层的数据包头信息（IP地址，MAC地址等），只剩下了数据负载（payload）；使用stream或datagram类型的socket时，需要指定IP和端口信息，就是为了在IP和TCP层处理数据包时捕获那些满足要求的数据包；</li>
@@ -467,8 +490,6 @@ UDP数据报首部在udp.h文件中定义：</p>
 <p>下面使用raw socket来封装并发送数据包</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-          
-        
       
     </div>
     
@@ -485,358 +506,28 @@ UDP数据报首部在udp.h文件中定义：</p>
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/14/netlink/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Kylin">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/14/netlink/" itemprop="url">netlink</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-14T10:40:00+08:00">
-                2019-09-14
-              </time>
+              <a href="/2019/09/14/netlink/" rel="next" title="netlink">
+                <i class="fa fa-chevron-left"></i> netlink
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">更新于&#58;</span>
-              
-              <time title="更新于" itemprop="dateModified" datetime="2019-09-30T08:14:55+08:00">
-                2019-09-30
-              </time>
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <h2 id="与内核常用的通信方式">与内核常用的通信方式</h2>
-<p>用户态程序与内核态程序进行通信的方式主要有以下几种：</p>
-<ul>
-<li>/proc虚拟文件系统，/proc是linux的一个目录，该目录下存储了内核的运行信息，很多linux查询命令其实都是输出/proc目录下的特定信息。当内核的某个变量保存到了/proc目录下之后，用户可以直接修改该变量的值，就可以改变内核的某个模块的运行逻辑，从而实现用户态与内核态程序通信的目的。</li>
-<li>netlink通信，netlink通信的过程其实和socket通信一样，在socket通信中，客户端负责封装消息体，然后通过socket机制把消息发送到服务端，服务端则负责解读消息体并执行消息处理程序。由于socket通信是全双工的，所以当用户态程序与内核态程序进行通信时，客户端既可以发送消息，也可以接收内核态返回的消息，反之同理。netlink不仅可以实现用户-内核空间的通信还可以实现用户空间两个进程之间，或内核空间两个进程之间的通信。</li>
-</ul>
-<h2 id="netlink简介">netlink简介</h2>
-<p>在编写netlink程序时，程序员需要自行封装消息体，同时需要自定义处理消息的逻辑。一般的做法是编写一个LKM（Linux Kernel Module，是一个后缀为ko的文件），在LKM里定义内核处理netlink消息的逻辑，然后把ko文件加载到内核中，就可以实现用户态和内核态程序之间的通信。netlink支持两种类型的通信方式：单播和多播，单播指的是一个用户进程和一个内核子系统之间进行1对1的通信；多播指的是一个内核子系统和多个用户进程之间进行1：N的通信。本文讨论的是单播通信方式，那么第一个问题来了，当用户态程序通过netlink往内核发送消息时，用户态是如何标识这条消息发给哪个内核子系统的呢，当内核子系统通过netlink往用户态程序发送消息时，用户态程序是如何知道这是发给自己的消息呢？答案在下面的数据结构里。</p>
-<h2 id="数据结构">数据结构</h2>
-<p>netlink消息由两部分组成：消息头和消息体，消息头的长度固定为16个字节，消息体的长度是可变的。如下所示：
-<img src="/2019/09/14/netlink/msg.png" alt="netlink消息" title="netlink消息体"></p>
-<h3 id="消息头数据结构">消息头数据结构</h3>
-<p>消息头由结构体nlmsghdr定义</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">struct nlmsghdr&#123;</span><br><span class="line">	__u32 nlmsg_len;    // 整个netlink消息的长度</span><br><span class="line">	__u16 nlmsg_type;   // 消息类型</span><br><span class="line">	__u16 nlmsg_flags;  // 额外标志位</span><br><span class="line">	__u32 nlmsg_seq;    // 消息的序列号</span><br><span class="line">	__u32 nlmsg_pid;    // 发送消息的进程号</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/2019/09/14/netlink/netlink_msg_header.png" alt title="netlink消息头">
-结构体的字段含义<a href="https://e-mailky.github.io/2017-02-14-netlink-user-kernel1" target="_blank" rel="noopener">如下</a>：</p>
-<ul>
-<li>nlmsg_len：整个消息的长度，按字节计算。包括了Netlink消息头本身。</li>
-<li>nlmsg_type：<strong>消息的类型</strong>，内核通过这个字段来判断这个消息的用途，用户可以自定义新的消息类型(定义的值不能小于0x10)，也可以使用已经定义好的类型，如下：
-<ul>
-<li>NLMSG_NOOP：空消息，什么也不做；</li>
-<li>NLMSG_ERROR：指明该消息中包含一个错误；</li>
-<li>NLMSG_DONE：如果内核通过Netlink队列返回了多个消息，那么队列的最后一条消息的类型为NLMSG_DONE。</li>
-<li>NLMSG_OVERRUN：暂时没用到。</li>
-<li>假如现在要允许内核读写特定的网络设备，通常的做法是定义两种消息类型：
-<ul>
-<li>#define MSG_SETCFG 0x11</li>
-<li>#define MSG_GETCFG 0x12</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>nlmsg_flags：附加在消息上的额外说明信息，其取值包括以下内容：
-<ul>
-<li>
-<p>#define NLM_F_REQUEST   1 	// Message is a request</p>
-</li>
-<li>
-<p>#define NLM_F_MULTI     2 	// Multipart message</p>
-</li>
-<li>
-<p><strong>#define NLM_F_ACK       4</strong> 	// ACK message requested</p>
-</li>
-<li>
-<p>#define NLM_F_ECHO      8 	// Request to echo the request</p>
-</li>
-<li>
-<p>#define NLM_F_ROOT 	  0x100 //Return based on root of tree.</p>
-</li>
-<li>
-<p>#define NLM_F_MATCH     0x200 // Return all matching entries.</p>
-</li>
-<li>
-<p>#define NLM_F_ATOMIC    0x400 // Obsoleted, once used to request an atomic operation.</p>
-</li>
-<li>
-<p>#define NLM_F_DUMP      (NLM_F_ROOT|NLM_F_MATCH) //Return a list of all objects (NLM_F_ROOT|NLM_F_MATCH).</p>
-</li>
-<li>
-<p>#define NLM_F_REPLACE   0x100 // Replace an existing object if it exists</p>
-</li>
-<li>
-<p>#define NLM_F_EXCL      0x200 // Do not update object if it exists already</p>
-</li>
-<li>
-<p>#define NLM_F_CREATE    0x400 // Create object if it does not exist yet</p>
-</li>
-<li>
-<p>#define NLM_F_APPEND    0x800 // Add object at end of list</p>
-</li>
-</ul>
-</li>
-<li>nlmsg_seq：消息序列号。因为Netlink是面向数据报的，所以存在丢失数据的风险，但是netlink提供了如何确保消息不丢失的机制， 让程序开发人员根据其实际需求而实现。消息序列号一般和NLM_F_ACK类型的消息联合使用，如果用户的应用程序需要保证其发送的每条消息都成功被内核收到的话，那么它发送消息时,需要用户程序自己设置序号，内核收到该消息后对提取其中的序列号，然后在发送给用户程序 回应消息里设置同样的序列号。有点类似于TCP的响应和确认机制。</li>
-<li>nlmsg_pid：当用户空间的进程和内核空间的某个子系统之间通过Netlink建立了数据交换的通道后,netlink会为每个这样的通道分配一个唯一的数字标识。其主要作用就是将来自用户空间的请求消息和响应消息进行关联。说得直白一点，假如用户空间存在多个用户进程，内核空间同样存在多个进程,netlink必须提供一种机制用于确保每一对“用户-内核”空间通信的进程之间的数据交互不会发生紊乱。<strong>通常情况下，用户空间的进程在向内核发送消息时一般通过系统调用getpid()将当前进程的进程号赋给该变量，即用户空间的进程希望得到内核的响应时才会这么做。从内核主动发送到用户空间的消息该字段都被设置为0。</strong></li>
-</ul>
-<h3 id="消息体数据结构">消息体数据结构</h3>
-<p>netlink消息体采用TLV(Type-Length-Value)格式：
-<img src="/2019/09/14/netlink/netlink_msg_body.jpg" alt title="netlink消息体"></p>
-<h2 id="用户态程序">用户态程序</h2>
-<p><img src="/2019/09/14/netlink/netlink_marco.jpg" alt title="netlink宏">
-常用到的几个宏：</p>
-<ul>
-<li>NLMSG_SPACE(MAX_PAYLOAD): 该宏用于返回不小于MAX_PAYLOAD且4字节对齐的最小长度值，<strong>一般用于向内存系统申请空间是指定所申请的内存字节数</strong>,所申请的空间里不包含netlink消息头部所占的字节数</li>
-<li>NLMSG_LENGTH(len): len参数为消息体的长度，该宏返回整个netlink消息的长度：消息体的长度加上消息头的长度(16字节）</li>
-<li>NLMSG_DATA(nlh): 该宏用于返回Netlink消息中数据部分的首地址，在写入和读取消息数据部分时会用到它。</li>
-<li>NLMSG_NEXT(nlh, len): 宏NLMSG_NEXT(nlh,len)用于得到下一个消息的首地址, 同时len 变为剩余消息的长度</li>
-<li>NLMSG_OK(nlh, len): 消息的长度小于len时返回true，内核收到了的一个数据包里可能包含了多条netlink消息(如下所示)，需要使用while和宏定义来循环处理一个数据包</li>
-<li>NLMSG_PAYLOAD(nlh, len):用于返回payload的长度
-<img src="/2019/09/14/netlink/skb_buff.jpg" alt title="数据包内容"></li>
-</ul>
-<h3 id="1-创建socket">1.创建socket</h3>
-<p>使用如下函数创建netlink socket</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socket(int domain, int type, int protocol)</span><br></pre></td></tr></table></figure>
-<p>上述参数的含义如下：</p>
-<ul>
-<li>domain：地址簇，设置为AF_NETLINK或PF_NETLINK,它们俩实际为一个东西,它表示要使用netlink</li>
-<li>type：类型，SOCK_RAM(工作在网络层，用于处理ICMP，IGMP等网络报文、特殊的IPv4报文)或SOCK_DGRAM(UDP)</li>
-<li>protocol：协议类型，既可以选择预定义好的协议类型，也可以是用户自定义的协议类型，预定义的协议类型包括有：
-<ul>
-<li>#define NETLINK_ROUTE        0    /* Routing/device hook                */</li>
-<li>#define NETLINK_UNUSED        1    /* Unused number                */</li>
-<li>#define NETLINK_USERSOCK    2    /* Reserved for user mode socket protocols     */</li>
-<li>#define NETLINK_FIREWALL    3    /* Firewalling hook                */</li>
-<li>#define NETLINK_INET_DIAG    4    /* INET socket monitoring            */</li>
-<li>#define NETLINK_NFLOG        5    /* netfilter/iptables ULOG */</li>
-<li>#define NETLINK_XFRM        6    /* ipsec */</li>
-<li>#define NETLINK_SELINUX        7    /* SELinux event notifications */</li>
-<li>#define NETLINK_ISCSI        8    /* Open-iSCSI */</li>
-<li>#define NETLINK_AUDIT        9    /* auditing */</li>
-<li>#define NETLINK_FIB_LOOKUP    10</li>
-<li>#define NETLINK_CONNECTOR    11</li>
-<li>#define NETLINK_NETFILTER    12    /* netfilter subsystem */</li>
-<li>#define NETLINK_IP6_FW        13</li>
-<li>#define NETLINK_DNRTMSG        14    /* DECnet routing messages */</li>
-<li>#define NETLINK_KOBJECT_UEVENT    15    /* Kernel messages to userspace */</li>
-<li>#define NETLINK_GENERIC        16</li>
-<li>/* leave room for NETLINK_DM (DM Events) */</li>
-<li>#define NETLINK_SCSITRANSPORT    18    /* SCSI Transports */</li>
-<li>#define NETLINK_ECRYPTFS    19</li>
-<li>#define NETLINK_RDMA        20</li>
-</ul>
-</li>
-</ul>
-<p>常见的用法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//用户一般都会自定义一个协议类型，注意要从21开始；并且使用UDP协议来通信</span><br><span class="line">#define CUSTOMIZE_PROTOCOL 21</span><br><span class="line">sock_fd = socket(AF_NETLINK, SOCK_DGRAM, CUSTOMIZE_PROTOCOL)</span><br></pre></td></tr></table></figure>
-<h3 id="2-创建netlink-socket地址">2.创建netlink socket地址</h3>
-<p>netlink的socket地址结构由sockaddr_nl结构体定义：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">struct sockaddr_nl</span><br><span class="line">&#123;</span><br><span class="line">	sa_family_t     nl_family;</span><br><span class="line">	unsigned short  nl_pad;</span><br><span class="line">	__u32			nl_pid;</span><br><span class="line">	__u32			nl_groups;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>结构体的字段含义如下：</p>
-<ul>
-<li>nl_family:必须设置为AF_NETLINK或着PF_NETLINK</li>
-<li>nl_pad:该字段当前没有使用，因此要总是设置为 0</li>
-<li>nl_pid:表示接收或发送消息的进程的ID，如果希望内核处理消息或多播消息，就把该字段设置为0，否则设置为处理消息的进程ID</li>
-<li>nl_groups:用于指定多播组bind函数用于把调用进程加入到该字段指定的多播组，如果设置为0，表示调用者不加入任何多播组</li>
-</ul>
-<p>常见的用法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct sockaddr_nl kernel_addr;</span><br><span class="line">memset(&amp;kernel_addr, 0, sizeof(kernel_addr));</span><br><span class="line">kernel_addr.nl_family = AF_NETLINK;</span><br><span class="line">kernel_addr.nl_pid = 0; // 表示要把这个消息发给内核</span><br><span class="line">kernel_addr.nl_groups = 0; // 表示加入任何多播组</span><br></pre></td></tr></table></figure>
-<h3 id="3-填充netlink消息头">3.填充netlink消息头</h3>
-<p>常见用法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// 自定义消息类型，下面的例子表示当内核收到消息后，</span><br><span class="line">enum</span><br><span class="line">&#123;</span><br><span class="line">	MSG_BASE = 0x11,</span><br><span class="line">	MSG_ADD,</span><br><span class="line">	#define MSG_ADD MSG_ADD</span><br><span class="line">	MSG_DEL,</span><br><span class="line">	#define MSG_DEL MSG_DEL</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">	__MSG_COUNT</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#define MSG_MAX (__MSG_COUNT - 1)</span><br><span class="line"></span><br><span class="line">// 消息的最大负载为1024个字节</span><br><span class="line">#define MAX_PAYLOAD 1024</span><br><span class="line">struct nlmsghdr *netlink_header = NULL;</span><br><span class="line">memset(netlink_header, 0, MAX_PAYLOAD);</span><br><span class="line">netlink_header-&gt;nlmsg_len = NLMSG_SPACE(MAX_PAYLOAD);</span><br><span class="line">netlink_header-&gt;nlmsg_pid = getpid(); // 因为要接收内核的消息，所以需要告诉内核这个进程的ID</span><br><span class="line">netlink_header-&gt;nlmsg_flags = NLM_F_ACK; // 在消息发送成功后，会接收到ACK确认，一般用于保证通信双方之间的同步</span><br><span class="line">netlink_header-&gt;type = MSG_ADD; // 表示本条消息的类型，此处表示接收方对本条消息进行加法运算</span><br></pre></td></tr></table></figure>
-<h3 id="4-填充netlink消息体">4.填充netlink消息体</h3>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// 简单地封装字节流</span><br><span class="line">char *data = &quot;hello&quot;;</span><br><span class="line">strcpy(NLMSG_DATA(nlh), data);</span><br><span class="line"></span><br><span class="line">// 封装自定义结构体</span><br><span class="line">struct operator &#123;</span><br><span class="line">	int paraA;</span><br><span class="line">	int paraB;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct person&#123;</span><br><span class="line">	int age;</span><br><span class="line">	char name[20];</span><br><span class="line">	char sex[6];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">struct operator *op;</span><br><span class="line">op = NLMSG_DATA(netlink_header); // 通过调用NLMSG_DATA宏，将op指针指向netlink消息体的起始地址</span><br><span class="line">op-&gt;paraA = 100;</span><br><span class="line">op-&gt;paraB = 200;</span><br><span class="line">netlink_header-&gt;nlmsg_len = NLMSG_LENGTH(sizeof(struct operator)); // NLMSG_LENGTH这个宏可以计算整个netlink消息的长度：消息头(16byte) + 消息体(函数的参数)</span><br></pre></td></tr></table></figure>
-<h3 id="5-发送消息并接收ack">5.发送消息并接收ACK</h3>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 通过sock_df发送</span><br><span class="line">sendto(sock_fd,netlink_head,netlink_head-&gt;nlmsg_len,0,(struct sockaddr*)(&amp;kernel_addr),sizeof(kernel_addr));</span><br></pre></td></tr></table></figure>
-<p>注意：只有在将netlink消息的type设置为NLM_F_ACK才需要处理ACK消息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="6-接收内核返回的消息">6.接收内核返回的消息</h3>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">memset(netlink_header, 0, MAX_PAYLOAD); // 清空整个netlink消息，包括消息头和消息体</span><br><span class="line">recvfrom(sock_fd, netlink_header, NLMSG_LENGTH(MAX_PAYLOAD), 0, (struct sockaddr*)(&amp;kernel_addr), NULL);</span><br><span class="line">char *recv_data;</span><br><span class="line">recv_data = NLMSG_DATA(netlink_header);</span><br></pre></td></tr></table></figure>
-<h3 id="7-关闭netlink套接字">7.关闭netlink套接字</h3>
-<p>close(sock_fd);
-free(netlink_header);</p>
-<h3 id="8-总结">8.总结</h3>
-<p>通过上面可以看到，一共使用了三种手段来定义一个netlink消息：</p>
-<ul>
-<li>在socket中，protocol字段指定了使用何种通信协议</li>
-<li>在netlink socket中绑定当前通信的pid，用于接收内核返回的消息</li>
-<li>在netlink消息头中指定消息类型，告诉通信对象本条消息的作用</li>
-</ul>
-<h2 id="内核态程序">内核态程序</h2>
-<p>我们在内核中会用一个链表来维护所有的人员信息，在平常的用法中，我们都是把数据对象嵌入到链表中，如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">struct person_entry &#123;</span><br><span class="line">	int age;</span><br><span class="line">	char name[20];</span><br><span class="line">	struct person_entry *next; // 在数据对象中通过指针来链接对象</span><br><span class="line">&#125;;</span><br><span class="line">struct person_table &#123;</span><br><span class="line">	struct person_entry *first; // 指向结构体的头指针</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>但是在内核中，需要把上面的用法反过来，把链表嵌入到对象中，如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 在Linux内核链表中，需要用链表组织起来的数据通常会包含一个struct list_head成员</span><br><span class="line">struct list_head &#123;</span><br><span class="line">	struct list_head *next, *prev;	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">struct person_entry&#123;</span><br><span class="line">	struct list_head myself;</span><br><span class="line">	int age;</span><br><span class="line">	char name[20];</span><br><span class="line">&#125;;</span><br><span class="line">struct person_table&#123;</span><br><span class="line">	struct list_head first;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>可以看到，在上面的struct person中并没有一个指向下一个结构体的指针，struct person_table中存放的头指针也没有指向结构体struct person_entry。在内核中采用这种设计方法是为了提高链表的通用性，在任意自定义的结构体中只要包含了struct list_head变量，就能使用下面的函数来构建链表，而不再需要用户自定义链表的操作函数。</p>
-<ul>
-<li>链表初始化：static inline void INIT_LIST_HEAD(struct list_head *list); 创建一个空链表，list作为头指针</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">struct person_table *person_list = NULL;</span><br><span class="line">person_list = kzalloc(sizeof(struct person_table), GFP_KERNEL); // GFP_KERNEL是在linux/gfp.h中定义的一个宏，是分配内核空间的内存时最常用的一个标志位，在无内存可用时可引起休眠</span><br><span class="line">INIT_LIST_HEAD(&amp;person_list-&gt;first); // 创建空链表</span><br></pre></td></tr></table></figure>
-<ul>
-<li>添加元素：static inline void list_add(struct list_head *new, struct list_head *head)；head是头指针，把new插入到head之后</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">struct person_entry *person = NULL;</span><br><span class="line">person = kzalloc(sizeof(struct person_entry), GFP_KERNEL);</span><br><span class="line">if(!person)</span><br><span class="line">	return NULL;</span><br><span class="line">person-&gt;age = 10;</span><br><span class="line">strcpy(person-&gt;name, &quot;hello world&quot;);</span><br><span class="line">list_add(&amp;person-&gt;myself, &amp;person_list-&gt;first); // 将新创建的person结构体挂载到链表person_list的头结点first之后</span><br></pre></td></tr></table></figure>
-<ul>
-<li>删除元素：static inline void list_del(struct list_head *entry); // 删除entry指针所在的对象</li>
-<li>遍历链表：直接调用下面的宏来遍历链表</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * list_for_each_entry  -   iterate over list of given type</span><br><span class="line"> * @pos:    the type * to use as a loop cursor. 指向遍历过程中的对象指针</span><br><span class="line"> * @head:   the head for your list. 要遍历的链表的头指针</span><br><span class="line"> * @member: the name of the list_struct within the struct. struct的内部变量名(struct list_head类型的变量名字)</span><br><span class="line"> */</span><br><span class="line">#define list_for_each_entry(pos, head, member)              \</span><br><span class="line">    for (pos = list_entry((head)-&gt;next, typeof(*pos), member);  \</span><br><span class="line">         &amp;pos-&gt;member != (head);    \</span><br><span class="line">         pos = list_entry(pos-&gt;member.next, typeof(*pos), member))</span><br><span class="line"></span><br><span class="line">// 例子</span><br><span class="line">struct person_entry *person = NULL;</span><br><span class="line">list_for_each_entry(person, &amp;person_list-&gt;first, myself) &#123; // 从后往前遍历元素</span><br><span class="line">	if (person-&gt;age == 10) &#123;</span><br><span class="line">		break;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">if (&amp;(person-&gt;myself) == &amp;(person_list-&gt;first)) return -1; // 表示没有找到满足要求的元素</span><br><span class="line">list_del(&amp;p-&gt;myself); // 删除元素</span><br><span class="line">kfree(person);</span><br></pre></td></tr></table></figure>
-<h3 id="1-创建内核态socket">1.创建内核态socket</h3>
-<p>不同版本的内核用不同的接口来创建内核态socket，如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#define CUSTOMIZE_PROTOCOL 21</span><br><span class="line">static struct sock *kernel_socket</span><br><span class="line">int kernel_netlink_init(void)&#123;</span><br><span class="line">#if LINUX_VERSION_CODE &lt; KERNEL_VERSION(3, 8, 0)</span><br><span class="line">	kernel_sock = netlink_kernel_create(&amp;init_net, CUSTOMIZE_PROTOCOL, 0, msg_receive, NULL, THIS_MODULE);</span><br><span class="line">#else</span><br><span class="line">	struct netlink_kernel_cfg cfg = &#123;</span><br><span class="line">		.groups = 0,</span><br><span class="line">		.input = msg_reveive,</span><br><span class="line">		.cb_mutex = NULL,</span><br><span class="line">		.flags = NL_CFG_F_NONROOT_RECV,</span><br><span class="line">	&#125;;</span><br><span class="line">	kernel_sock = netlink_kernel_create(&amp;init_net, CUSTOMIZE_PROTOCOL, &amp;cfg);</span><br><span class="line">#endif</span><br><span class="line">	if (!kernel_sock)&#123;</span><br><span class="line">		printk(&quot;Failed to create netlink in kernel&quot;);</span><br><span class="line">		return -1;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当内核版本小于3.8.0时，netlink_kernel_create()函数具有6个参数，按顺序解析：</p>
-<ul>
-<li>网络名字空间namespace，在不同的名字空间里面可以有自己的转发信息库，有自己的一套net_device等等。默认情况下都是使用init_net这个全局变量</li>
-<li>netlink协议类型，如果在用户态里自定义了通信协议，则此处也必须使用同样的通信协议</li>
-<li>指定多播组号</li>
-<li><strong>回调函数，当内核接收到消息后会调用该函数来处理消息</strong></li>
-<li>信号量，一般设置为NULL即可</li>
-<li>回调函数所在的模块名，此处表示在本模块</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">struct netlink_kernel_cfg &#123;</span><br><span class="line">  unsigned int groups;</span><br><span class="line">  unsigned int flags;</span><br><span class="line">  void (*input)(struct sk_buff *skb);</span><br><span class="line">  struct mutex *cb_mutex;</span><br><span class="line">  void (*bind)(int group);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>该结构体的成员变量含义：</p>
-<ul>
-<li>groups:用于指定多播组或掩码</li>
-<li>flags:可以设置为NL_CFG_F_NONROOT_RECV或NL_CFG_F_NONROOT_SEND</li>
-<li>input：回调函数</li>
-<li>cb_mutex:可选参数，一般设置为NULL</li>
-</ul>
-<h3 id="2-回调函数">2.回调函数</h3>
-<p>当内核接收到用户态发来的数据后，会调用上个步骤注册的回调函数来处理数据，在回调函数中，一般会使用switch case结构来处理多种类型的数据</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">static int msg_receive(struct sk_buff *skb)</span><br><span class="line">&#123;</span><br><span class="line">	struct nlmsghdr *netlink_message;</span><br><span class="line">	int pid; // 用户态里发送这条消息的线程号</span><br><span class="line">	int msg_type; // 消息的类型</span><br><span class="line"></span><br><span class="line">	netlink_message = (struct nlmsghdr *)skb-&gt;data;</span><br><span class="line">	//pid = netlink_message-&gt;nlmsg_pid;</span><br><span class="line">	msg_type = netlink_message-&gt;nlmsg_type;</span><br><span class="line">	if(msg_type &gt; MSG_MAX) &#123;</span><br><span class="line">		printk();</span><br><span class="line">		return -1;</span><br><span class="line">	&#125;</span><br><span class="line">	switch(msg_type)&#123;</span><br><span class="line">		case MSG_ADD:</span><br><span class="line">			return add_person(netlink_message);</span><br><span class="line">		case MSG_DEL:</span><br><span class="line">			return del_person(netlink_message);</span><br><span class="line">		default:</span><br><span class="line">			printk(KERN_ERR &quot;unknown message type&quot;);</span><br><span class="line">			return -1</span><br><span class="line">	&#125;</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="3-创建并填充sk-buff">3.创建并填充sk_buff</h3>
-<p>sk_buff,全称socket buffers，简称skb，中文名字叫套接字缓存。它作为网络数据包的存放地点，使得协议栈中每个层都可以对数据进行操作，从而实现了数据包自底向上的传递。该结构维护一个收到的或者要发送的网络包。但其本身并不包含存放网络包的数据的存储区。存储区是另外单独分配的内存空间，但该结构说明了如何访问存储区空间，如何维护多个存储区空间以及存储网络包解析的成果。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">struct person_list &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// The function nlmsg_data() will calculate the necessary offset based on the message and returns a pointer to the start of the message payload.</span><br><span class="line">int add_person(struct nlmsghdr *netlink_header)&#123;</span><br><span class="line">	struct person *p = nlmsg_data(netlink_header);</span><br><span class="line">	int rc = -1;</span><br><span class="line">	return</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 创建sk_buff</span><br><span class="line">struct sk_buff *skb</span><br><span class="line">skb = nlmsg_new(NLMSG_DEFAULT, GFP_KERNEL);</span><br><span class="line">if(!skb)&#123;</span><br><span class="line">	return -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用nlmsg_put来创建netlink消息头部
-struct nlmsghdr *nlmsg_put(struct nl_msg *msg, uint32_t port, uint32_t seqnr,
-int nlmsg_type, int payload, int nlmsg_flags);</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 设置netlink消息头部</span><br><span class="line">struct nlmsghdr *netlink_header;</span><br><span class="line">#if LINUX_VERSION_CODE &lt; KERNEL_VERSION(3, 8, 0)</span><br><span class="line">netlink_header = nlmsg_put(skb, NETLINK_CB(in_skb).pid, 0, HUYA_MSG_NEW_IP,</span><br><span class="line">                    sizeof(struct huya_ip_info), 0);</span><br><span class="line">#else</span><br><span class="line">netlink_header = nlmsg_put(skb, NETLINK_CREDS(in_skb)-&gt;pid, 0, HUYA_MSG_NEW_IP,</span><br><span class="line">                    sizeof(struct huya_ip_info), 0);</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
-<pre><code>
-
-## 内核模块
-
-## 内核模块的编写
-
-## 内核模块的命令</code></pre>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -846,342 +537,11 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/26/网络设备/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Kylin">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/26/网络设备/" itemprop="url">网络拓扑</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-26T11:23:47+08:00">
-                2019-08-26
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">更新于&#58;</span>
-              
-              <time title="更新于" itemprop="dateModified" datetime="2019-08-31T16:46:32+08:00">
-                2019-08-31
-              </time>
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://mp.weixin.qq.com/s?__biz=MjM5MTM3MzIzMg==&amp;mid=209513316&amp;idx=1&amp;sn=e5dbd9a2ccccb88d0ee5c4d5790699c1#rd" target="_blank" rel="noopener">原文链接</a></p>
-<h1>网络设备</h1>
-<h2 id="中继器">中继器</h2>
-<pre><code>+ 协议栈中的位置：物理层
-+ 作用：对网线上的信号进行中继和放大，实现信号在网线上的远距离传输
-</code></pre>
-<h2 id="集线器">集线器</h2>
-<pre><code>协议栈中的位置：物理层
-作用：中继器只有两个接口，而集线器就是一个多口中继器
-弊端：从任意接口收到的数据，都会往其他所有接口泛洪，因为集线器不能识别数据包的寻址信息和上层内容，无法对终端主机进行隔离，使得所有的主机都处于同一个冲突域中，导致网络带宽利用率低
-</code></pre>
-<h2 id="网桥">网桥</h2>
-<pre><code>协议栈中的位置：链路层
-改进对象：集线器的泛洪问题
-作用：记录终端主机的MAC地址并生成MAC表，网桥根据MAC表转发主机之间的数据流；因此能够隔离冲突域( ![](网络设备/bridge.png)，例如PC1发往PC2的数据不会转发到E2接口 )
-弊端：接口有限，默认只有两个接口，可隔离的冲突域数量有限
-</code></pre>
-<h2 id="交换机">交换机</h2>
-<pre><code>协议栈中的位置：链路层
-功能：记录终端主机的MAC地址并生成MAC表，交换机根据MAC表转发主机之间的数据流；
-改进：交换机是在网桥的基础上进行延伸和升级，相比于网桥，有以下几个优势：
-- 接口数量更加密集，每个主机都在独立的冲突域
-- 使用ASIC硬件芯片进行高速转发
-- 能够进行VLAN隔离（不仅可以隔离冲突域，还可以通过VLAN隔离广播域）
-交换机是局域网设备，无法实现远程广域网通信
-</code></pre>
-<h2 id="路由器">路由器</h2>
-<pre><code>协议栈中的位置：网络层
-改进：
-功能：基于IP寻址，采用路由表实现数据转发；用于连接不同的局域网，实现广播域隔离
-</code></pre>
-<h2 id="ac-access-point-无线路由器">AC（Access Point，无线路由器）</h2>
-<pre><code>协议栈中的位置：
-功能：可以看做是无线功能的交换机/路由器
-功能：
-</code></pre>
-<h1>网络架构</h1>
-<h2 id="家庭网络">家庭网络</h2>
-<pre><code>网络拓扑：通过无线路由器提供WIFI热点接入，并提供路由器连接到外网
-设备：无线路由器
-所用技术：WIFI，NAT，PPPOE，DHCP
-</code></pre>
-<h2 id="小型创业公司">小型创业公司</h2>
-<pre><code>网络拓扑：采用两层架构，单核心拓扑
-设备：路由器，交换机，服务器
-所用技术：VLAN，TRUNK，DHCP，WLAN，静态路由/OSPF，PPPOE，NAT，ACL
-</code></pre>
-<h2 id="园区网络-大中型企业-校园网">园区网络（大中型企业，校园网）</h2>
-<pre><code>网络拓扑：采用 接入-汇聚-核心 三层架构，双核心网络。根据网络需求，分为用户区，对内服务区，对外服务区，管理区，互联网区等，通过核心交换机和防火墙进行连接和隔离。互联网采用多出口连接，通过路由器进行拨号和NAT，通过流控产品进行负载均衡/上网行为管理，通过防火墙进行安全隔离
-设备：路由器，交换机，无线AC/AP，防火墙，负载均衡器/行为管理，服务器
-技术：VLAN，TRUNK，MSTP，HSRP/VRRP，Etherchannel，WLAN，NAT，ACL，PPPOE，SNMP
-</code></pre>
-<h2 id="数据中心-idc">数据中心/IDC</h2>
-<pre><code>网络拓扑：采用两层架构，主要分为租户区（服务器集群），互联网区，安全管理区，其中租户区采用设备虚拟化和链路虚拟化技术，将设备处理能力和链路承载能力提高，并且在服务器区放置负载均衡器，将流量合理有效分配到固定的服务器上。互联网出口区采用路由器执行BGP和地址翻转，采用IPS/防DDOS设备防止大流量泛洪攻击，采用流控执行出口负载，采用防火墙进行安全隔离。安全管理区通过防火墙进行安全接入，通过审计，日志，入侵检测，网管等产品进行全网安全管理
-设备：路由器，交换机，负载均衡器，防火墙，入侵检测/入侵防御，网络审计，防DDOS，服务器
-技术：VLAN,TRUNK,vPC,IRF,LISP,Vxlan,TRILL,FarbriPath,BGP,MPLS,SNMP等</code></pre>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/24/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Kylin">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/24/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-24T20:57:16+08:00">
-                2019-08-24
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">更新于&#58;</span>
-              
-              <time title="更新于" itemprop="dateModified" datetime="2019-08-24T20:57:16+08:00">
-                2019-08-24
-              </time>
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="quick-start">Quick Start</h2>
-<h3 id="create-a-new-post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="run-server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="generate-static-files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="deploy-to-remote-sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -1189,6 +549,17 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
 
 
           
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
 
         </div>
         
@@ -1209,8 +580,17 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -1299,6 +679,22 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据包在协议栈内的处理流程"><span class="nav-number">1.</span> <span class="nav-text">数据包在协议栈内的处理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#网卡对数据帧进行硬过滤-数据链路层过滤"><span class="nav-number">1.1.</span> <span class="nav-text">网卡对数据帧进行硬过滤（数据链路层过滤）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向上层递交数据链路层数据帧"><span class="nav-number">1.2.</span> <span class="nav-text">向上层递交数据链路层数据帧</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网络层过滤"><span class="nav-number">1.3.</span> <span class="nav-text">网络层过滤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向上层递交网络层数据包"><span class="nav-number">1.4.</span> <span class="nav-text">向上层递交网络层数据包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运输层处理数据包"><span class="nav-number">1.5.</span> <span class="nav-text">运输层处理数据包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进入用户层"><span class="nav-number">1.6.</span> <span class="nav-text">进入用户层</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据包格式"><span class="nav-number">2.</span> <span class="nav-text">数据包格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#链路层数据包"><span class="nav-number">2.1.</span> <span class="nav-text">链路层数据包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网络层数据包"><span class="nav-number">2.2.</span> <span class="nav-text">网络层数据包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运输层数据包"><span class="nav-number">2.3.</span> <span class="nav-text">运输层数据包</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编写raw-socket"><span class="nav-number">3.</span> <span class="nav-text">编写raw socket</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#网络嗅探"><span class="nav-number">3.1.</span> <span class="nav-text">网络嗅探</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#封装发包"><span class="nav-number">3.2.</span> <span class="nav-text">封装发包</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1452,6 +848,10 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -1498,6 +898,30 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
 
     
 
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'kylinlingh',
+            repo: 'gitment-blog',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '0a8c96148f979276e18c3c6eeb20cc90efc9dea9',
+            
+                client_id: '4f0d0cb9922a37f8ebdf'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
     
 
 
