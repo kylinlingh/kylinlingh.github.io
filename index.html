@@ -293,7 +293,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/02/Linux下的rawsocket/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/11/2020/k8s学习笔记-一-k8s背景介绍/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Kylin">
@@ -312,7 +312,188 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/11/02/Linux下的rawsocket/" itemprop="url">Linux下的rawsocket</a></h1>
+                <a class="post-title-link" href="/2020/12/11/2020/k8s学习笔记-一-k8s背景介绍/" itemprop="url">k8s学习笔记(一) - k8s背景介绍</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-12-11T22:20:30+08:00">
+                2020-12-11
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-14T00:06:41+08:00">
+                2020-12-14
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/k8s学习/" itemprop="url" rel="index">
+                    <span itemprop="name">k8s学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="为什么需要k8s">为什么需要k8s</h2>
+<ul>
+<li>隔离不同的应用，虽然可以用虚拟机的方案，但是虚拟机会消耗更多的硬件资源，而容器则是轻量级的隔离方案，除了进程本身之外，不会消耗额外的资源，从而运行更多的应用。但存在着一个问题：容器因为完全共享了同一个os，所以并不能互相彻底的隔离。</li>
+<li>服务运行时对资源的动态调整</li>
+<li>为应用提供一个一致的运行环境，将Devops（开发人员于运维人员全程参与到项目的研发，部署和运营过程，可以让开发人员根据用户反馈快速迭代产品，同时也能了解到运维人员遇到的问题）转换为NoOps（开发人员不需要了解硬件的底层知识，同时也不需要与运维团队打交道）</li>
+</ul>
+<h2 id="如何实现隔离">如何实现隔离</h2>
+<p>两个重要概念：</p>
+<ul>
+<li>Linux Namespaces，使得每个进程只能看到自己的资源（文件，网络等），Linux的进程在运行时，只能看到同属于一个namespace的资源，Linux的namespace一共有以下几种：
+<ul>
+<li>Mount(mnt)</li>
+<li>Process ID(pid)</li>
+<li>Network(net，应用运行在哪个网卡上，每个网卡只能属于一个namespace，但是可以从一个ns挪到另一个ns上)</li>
+<li>Inter-process communication(ipc)</li>
+<li>UTS(隔离hostname和domain name，使得进程看到不同的hostname，从而认为自己运行在不同的机器上)</li>
+<li>User ID(user)</li>
+</ul>
+</li>
+<li>Linux Control Groups(cgroups)，限制进程可以使用的资源（CPU，内存，带宽等）</li>
+</ul>
+<h2 id="不同的app如何共享同样的文件">不同的APP如何共享同样的文件</h2>
+<p>镜像是由不同的分层（layers）组成，不同的镜像可能使用完全一致的layer，写时复制的功能？</p>
+<h2 id="容器仍然存在以下问题">容器仍然存在以下问题</h2>
+<ul>
+<li>如果机器不能给容器提供同样的内核模块，那么容器就运行不起来</li>
+<li>在x86上构建的镜像也不能运行在ARM的机器上</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/02/2019/Linux下的rawsocket/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Kylin">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/02/2019/Linux下的rawsocket/" itemprop="url">Linux下的rawsocket</a></h1>
         
 
         <div class="post-meta">
@@ -381,7 +562,7 @@
 <ul>
 <li>第一条路径是继续送到上层的IP和TCP层进行处理，然后送到一般的socket接口（譬如stream（TCP)和datagram(UDP) ），此时数据包已经完全去掉了所有协议层的数据包头信息（IP地址，MAC地址等），只剩下了数据负载（payload）；使用stream或datagram类型的socket时，需要指定IP和端口信息，就是为了在IP和TCP层处理数据包时捕获那些满足要求的数据包；</li>
 <li>另一条路径是绕过TCP/IP层的处理，直接送到raw socket（raw socket捕捉到的数据是内核协议栈中数据包的一份拷贝），从而使得应用层可以直接访问完全没有处理过的数据包，从而获取数据包里的包头信息（IP地址，MAC地址等）；注意的是，当网卡设置为“混杂”模式时才会捕获全部到达网卡的数据包，如果设置为“非混杂”模式，则只会捕获目的地址为本机的数据包。
-<img src="/2019/11/02/Linux下的rawsocket/img1.jpg" alt title="raw socket接收数据包的过程"></li>
+<img src="/2019/11/02/2019/Linux下的rawsocket/img1.jpg" alt title="raw socket接收数据包的过程"></li>
 </ul>
 <h4 id="网卡对数据帧进行硬过滤-数据链路层过滤">网卡对数据帧进行硬过滤（数据链路层过滤）</h4>
 <p>首先进行数据链路层校验和处理，如果校验和出错，直接扔掉，而不会拷贝给sock_raw套接字；然后根据网卡的模式不同会有不同的动作：如果设置了promisc混杂模式的话，则不做任何过滤直接交给下一层输入例程，否则非本机mac或者广播mac会被直接丢弃。</p>
@@ -398,25 +579,25 @@
 <hr>
 <h3 id="数据包格式">数据包格式</h3>
 <p>下图是数据包的组成
-<img src="/2019/11/02/Linux下的rawsocket/Ethernet-Important-Concept.png" alt title="数据包"></p>
+<img src="/2019/11/02/2019/Linux下的rawsocket/Ethernet-Important-Concept.png" alt title="数据包"></p>
 <h4 id="链路层数据包">链路层数据包</h4>
 <p>链路层的数据包格式如下图所示：
-<img src="/2019/11/02/Linux下的rawsocket/700px-Ethernet_Type_II_Frame_format.png" alt title="以太网包头">
+<img src="/2019/11/02/2019/Linux下的rawsocket/700px-Ethernet_Type_II_Frame_format.png" alt title="以太网包头">
 以太网数据包头由一个结构体来描述</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct ethhdr &#123;</span><br><span class="line">	unsigned char	h_dest[ETH_ALEN];	/* destination eth addr，目的MAC地址	*/</span><br><span class="line">	unsigned char	h_source[ETH_ALEN];	/* source ether addr，源MAC地址	*/</span><br><span class="line">	__be16		h_proto;		/* packet type ID field）	*/</span><br><span class="line">&#125; __attribute__((packed));</span><br></pre></td></tr></table></figure>
 <p>其中，h_proto指明了下一层协议的编号，如果其值为0x800(ETH_P_IP)，就表明下一层的数据包头是IP数据包的包头</p>
 <h4 id="网络层数据包">网络层数据包</h4>
 <p>ip数据包首部的结构如下图所示：
-<img src="/2019/11/02/Linux下的rawsocket/ipheader.png" alt title="ip数据包包头">
+<img src="/2019/11/02/2019/Linux下的rawsocket/ipheader.png" alt title="ip数据包包头">
 由下面的结构体定义（ip.h）：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">struct iphdr &#123;</span><br><span class="line">#if defined(__LITTLE_ENDIAN_BITFIELD)</span><br><span class="line">	__u8	ihl:4,</span><br><span class="line">		version:4;</span><br><span class="line">#elif defined (__BIG_ENDIAN_BITFIELD)</span><br><span class="line">	__u8	version:4, //IPV4</span><br><span class="line">  		ihl:4; // 首部长度，单位：4字节(注意这里的单位，如果要得到整个ip首部的长度，计算公式为:ihl*4)</span><br><span class="line">#else</span><br><span class="line">#error	&quot;Please fix &lt;asm/byteorder.h&gt;&quot;</span><br><span class="line">#endif</span><br><span class="line">	__u8	tos;    // type of service，服务类型</span><br><span class="line">	__be16	tot_len; // 总长度：首部及数据之和的长度</span><br><span class="line">	__be16	id; // 每产生一个数据报，其值加1，分片后的数据包具有同样的id</span><br><span class="line">	__be16	frag_off; // 片偏移，某片在原分组中的相对位置.也就是说,相对用户数据字段的起点,该片从何处开始.</span><br><span class="line">	__u8	ttl;</span><br><span class="line">	__u8	protocol; // 上层协议号，以便使目的主机的IP层知道应将数据部分上交给哪个处理过程，6（TCP），17（UDP）</span><br><span class="line">	__sum16	check;</span><br><span class="line">	__be32	saddr;</span><br><span class="line">	__be32	daddr;</span><br><span class="line">	/*The options start here. */</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <h4 id="运输层数据包">运输层数据包</h4>
 <p>运输层的协议有很多种，本文主要分析TCP和UDP，下图所示为TCP首部的格式：
-<img src="/2019/11/02/Linux下的rawsocket/tcpheader.png" alt title="tcp数据包首部"></p>
+<img src="/2019/11/02/2019/Linux下的rawsocket/tcpheader.png" alt title="tcp数据包首部"></p>
 <p>TCP的数据报首部在tcp.h文件中定义：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">struct tcphdr &#123;</span><br><span class="line">	__be16	source;</span><br><span class="line">	__be16	dest;</span><br><span class="line">	__be32	seq;</span><br><span class="line">	__be32	ack_seq;</span><br><span class="line">#if defined(__LITTLE_ENDIAN_BITFIELD)</span><br><span class="line">	__u16	res1:4,</span><br><span class="line">		doff:4,</span><br><span class="line">		fin:1,</span><br><span class="line">		syn:1,</span><br><span class="line">		rst:1,</span><br><span class="line">		psh:1,</span><br><span class="line">		ack:1,</span><br><span class="line">		urg:1,</span><br><span class="line">		ece:1,</span><br><span class="line">		cwr:1;</span><br><span class="line">#elif defined(__BIG_ENDIAN_BITFIELD)</span><br><span class="line">	__u16	doff:4,</span><br><span class="line">		res1:4,</span><br><span class="line">		cwr:1,</span><br><span class="line">		ece:1,</span><br><span class="line">		urg:1,</span><br><span class="line">		ack:1,</span><br><span class="line">		psh:1,</span><br><span class="line">		rst:1,</span><br><span class="line">		syn:1,</span><br><span class="line">		fin:1;</span><br><span class="line">#else</span><br><span class="line">#error	&quot;Adjust your &lt;asm/byteorder.h&gt; defines&quot;</span><br><span class="line">#endif	</span><br><span class="line">	__be16	window; // 此字段用来进行流量控制.单位为字节数,这个值是本机期望一次接收的字节数,源主机可以利用接收到的窗口值决定下一个报文段的大小</span><br><span class="line">	__sum16	check;</span><br><span class="line">	__be16	urg_ptr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>udp数据报首部的格式如下图所示：
-<img src="/2019/11/02/Linux下的rawsocket/udpheader.png" alt title="udp数据包首部">
+<img src="/2019/11/02/2019/Linux下的rawsocket/udpheader.png" alt title="udp数据包首部">
 UDP数据报首部在udp.h文件中定义：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct udphdr &#123;</span><br><span class="line">	__be16	source;</span><br><span class="line">	__be16	dest;</span><br><span class="line">	__be16	len;</span><br><span class="line">	__sum16	check;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <hr>
@@ -514,7 +695,7 @@ UDP数据报首部在udp.h文件中定义：</p>
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/14/netlink/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/14/2019/netlink/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Kylin">
@@ -533,7 +714,7 @@ UDP数据报首部在udp.h文件中定义：</p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/09/14/netlink/" itemprop="url">netlink</a></h1>
+                <a class="post-title-link" href="/2019/09/14/2019/netlink/" itemprop="url">netlink</a></h1>
         
 
         <div class="post-meta">
@@ -607,11 +788,11 @@ UDP数据报首部在udp.h文件中定义：</p>
 <p>在编写netlink程序时，程序员需要自行封装消息体，同时需要自定义处理消息的逻辑。一般的做法是编写一个LKM（Linux Kernel Module，是一个后缀为ko的文件），在LKM里定义内核处理netlink消息的逻辑，然后把ko文件加载到内核中，就可以实现用户态和内核态程序之间的通信。netlink支持两种类型的通信方式：单播和多播，单播指的是一个用户进程和一个内核子系统之间进行1对1的通信；多播指的是一个内核子系统和多个用户进程之间进行1：N的通信。本文讨论的是单播通信方式，那么第一个问题来了，当用户态程序通过netlink往内核发送消息时，用户态是如何标识这条消息发给哪个内核子系统的呢，当内核子系统通过netlink往用户态程序发送消息时，用户态程序是如何知道这是发给自己的消息呢？答案在下面的数据结构里。</p>
 <h2 id="数据结构">数据结构</h2>
 <p>netlink消息由两部分组成：消息头和消息体，消息头的长度固定为16个字节，消息体的长度是可变的。如下所示：
-<img src="/2019/09/14/netlink/msg.png" alt="netlink消息" title="netlink消息体"></p>
+<img src="/2019/09/14/2019/netlink/msg.png" alt="netlink消息" title="netlink消息体"></p>
 <h3 id="消息头数据结构">消息头数据结构</h3>
 <p>消息头由结构体nlmsghdr定义</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">struct nlmsghdr&#123;</span><br><span class="line">	__u32 nlmsg_len;    // 整个netlink消息的长度</span><br><span class="line">	__u16 nlmsg_type;   // 消息类型</span><br><span class="line">	__u16 nlmsg_flags;  // 额外标志位</span><br><span class="line">	__u32 nlmsg_seq;    // 消息的序列号</span><br><span class="line">	__u32 nlmsg_pid;    // 发送消息的进程号</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/2019/09/14/netlink/netlink_msg_header.png" alt title="netlink消息头">
+<p><img src="/2019/09/14/2019/netlink/netlink_msg_header.png" alt title="netlink消息头">
 结构体的字段含义<a href="https://e-mailky.github.io/2017-02-14-netlink-user-kernel1" target="_blank" rel="noopener">如下</a>：</p>
 <ul>
 <li>nlmsg_len：整个消息的长度，按字节计算。包括了Netlink消息头本身。</li>
@@ -674,9 +855,9 @@ UDP数据报首部在udp.h文件中定义：</p>
 </ul>
 <h3 id="消息体数据结构">消息体数据结构</h3>
 <p>netlink消息体采用TLV(Type-Length-Value)格式：
-<img src="/2019/09/14/netlink/netlink_msg_body.jpg" alt title="netlink消息体"></p>
+<img src="/2019/09/14/2019/netlink/netlink_msg_body.jpg" alt title="netlink消息体"></p>
 <h2 id="用户态程序">用户态程序</h2>
-<p><img src="/2019/09/14/netlink/netlink_marco.jpg" alt title="netlink宏">
+<p><img src="/2019/09/14/2019/netlink/netlink_marco.jpg" alt title="netlink宏">
 常用到的几个宏：</p>
 <ul>
 <li>NLMSG_SPACE(MAX_PAYLOAD): 该宏用于返回不小于MAX_PAYLOAD且4字节对齐的最小长度值，<strong>一般用于向内存系统申请空间是指定所申请的内存字节数</strong>,所申请的空间里不包含netlink消息头部所占的字节数</li>
@@ -685,7 +866,7 @@ UDP数据报首部在udp.h文件中定义：</p>
 <li>NLMSG_NEXT(nlh, len): 宏NLMSG_NEXT(nlh,len)用于得到下一个消息的首地址, 同时len 变为剩余消息的长度</li>
 <li>NLMSG_OK(nlh, len): 消息的长度小于len时返回true，内核收到了的一个数据包里可能包含了多条netlink消息(如下所示)，需要使用while和宏定义来循环处理一个数据包</li>
 <li>NLMSG_PAYLOAD(nlh, len):用于返回payload的长度
-<img src="/2019/09/14/netlink/skb_buff.jpg" alt title="数据包内容"></li>
+<img src="/2019/09/14/2019/netlink/skb_buff.jpg" alt title="数据包内容"></li>
 </ul>
 <h3 id="1-创建socket">1.创建socket</h3>
 <p>使用如下函数创建netlink socket</p>
@@ -860,7 +1041,7 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/26/网络设备/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/26/2019/网络设备/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Kylin">
@@ -879,7 +1060,7 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/08/26/网络设备/" itemprop="url">网络拓扑</a></h1>
+                <a class="post-title-link" href="/2019/08/26/2019/网络设备/" itemprop="url">网络拓扑</a></h1>
         
 
         <div class="post-meta">
@@ -1047,7 +1228,7 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/24/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/24/2019/hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Kylin">
@@ -1066,7 +1247,7 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/08/24/hello-world/" itemprop="url">Hello World</a></h1>
+                <a class="post-title-link" href="/2019/08/24/2019/hello-world/" itemprop="url">Hello World</a></h1>
         
 
         <div class="post-meta">
@@ -1225,14 +1406,32 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
             
 
             
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
             
 
           </nav>

@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="数据包在协议栈内的处理流程 如下图所示，网卡接收到了数据包，在链路层处理完之后会产生两条处理路径：  第一条路径是继续送到上层的IP和TCP层进行处理，然后送到一般的socket接口（譬如stream（TCP)和datagram(UDP) ），此时数据包已经完全去掉了所有协议层的数据包头信息（IP地址，MAC地址等），只剩下了数据负载（payload）；使用stream或datagram类型的so">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux下的rawsocket">
+<meta property="og:url" content="http://yoursite.com/2019/11/02/2019/Linux下的rawsocket/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="数据包在协议栈内的处理流程 如下图所示，网卡接收到了数据包，在链路层处理完之后会产生两条处理路径：  第一条路径是继续送到上层的IP和TCP层进行处理，然后送到一般的socket接口（譬如stream（TCP)和datagram(UDP) ），此时数据包已经完全去掉了所有协议层的数据包头信息（IP地址，MAC地址等），只剩下了数据负载（payload）；使用stream或datagram类型的so">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2019/11/02/2019/Linux下的rawsocket/img1.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/11/02/2019/Linux下的rawsocket/Ethernet-Important-Concept.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/02/2019/Linux下的rawsocket/700px-Ethernet_Type_II_Frame_format.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/02/2019/Linux下的rawsocket/ipheader.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/02/2019/Linux下的rawsocket/tcpheader.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/02/2019/Linux下的rawsocket/udpheader.png">
+<meta property="og:updated_time" content="2019-11-16T11:46:34.110Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux下的rawsocket">
+<meta name="twitter:description" content="数据包在协议栈内的处理流程 如下图所示，网卡接收到了数据包，在链路层处理完之后会产生两条处理路径：  第一条路径是继续送到上层的IP和TCP层进行处理，然后送到一般的socket接口（譬如stream（TCP)和datagram(UDP) ），此时数据包已经完全去掉了所有协议层的数据包头信息（IP地址，MAC地址等），只剩下了数据负载（payload）；使用stream或datagram类型的so">
+<meta name="twitter:image" content="http://yoursite.com/2019/11/02/2019/Linux下的rawsocket/img1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/11/02/2019/Linux下的rawsocket/">
+
+
+
+
+
+  <title>Linux下的rawsocket | Hexo</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/02/2019/Linux下的rawsocket/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Kylin">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux下的rawsocket</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-02T11:28:52+08:00">
+                2019-11-02
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-11-16T19:46:34+08:00">
+                2019-11-16
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/02/2019/Linux下的rawsocket/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2019/11/02/2019/Linux下的rawsocket/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="数据包在协议栈内的处理流程">数据包在协议栈内的处理流程</h3>
+<p>如下图所示，网卡接收到了数据包，在链路层处理完之后会产生两条处理路径：</p>
+<ul>
+<li>第一条路径是继续送到上层的IP和TCP层进行处理，然后送到一般的socket接口（譬如stream（TCP)和datagram(UDP) ），此时数据包已经完全去掉了所有协议层的数据包头信息（IP地址，MAC地址等），只剩下了数据负载（payload）；使用stream或datagram类型的socket时，需要指定IP和端口信息，就是为了在IP和TCP层处理数据包时捕获那些满足要求的数据包；</li>
+<li>另一条路径是绕过TCP/IP层的处理，直接送到raw socket（raw socket捕捉到的数据是内核协议栈中数据包的一份拷贝），从而使得应用层可以直接访问完全没有处理过的数据包，从而获取数据包里的包头信息（IP地址，MAC地址等）；注意的是，当网卡设置为“混杂”模式时才会捕获全部到达网卡的数据包，如果设置为“非混杂”模式，则只会捕获目的地址为本机的数据包。
+<img src="/2019/11/02/2019/Linux下的rawsocket/img1.jpg" alt title="raw socket接收数据包的过程"></li>
+</ul>
+<h4 id="网卡对数据帧进行硬过滤-数据链路层过滤">网卡对数据帧进行硬过滤（数据链路层过滤）</h4>
+<p>首先进行数据链路层校验和处理，如果校验和出错，直接扔掉，而不会拷贝给sock_raw套接字；然后根据网卡的模式不同会有不同的动作：如果设置了promisc混杂模式的话，则不做任何过滤直接交给下一层输入例程，否则非本机mac或者广播mac会被直接丢弃。</p>
+<h4 id="向上层递交数据链路层数据帧">向上层递交数据链路层数据帧</h4>
+<p>在进入网络层之前，系统会检查系统中是否有通过socket(AF_PACKET, SOCK_RAW, ...)创建的套接字；如果有并且与指定的协议相符的话，系统就给每个这样的socket接收缓冲区发送一个数据帧拷贝。然后进入网络层。</p>
+<h4 id="网络层过滤">网络层过滤</h4>
+<p>IP层会对该数据包进行软过滤：检查校验或者丢弃非本机IP或者广播IP的数据包等</p>
+<h4 id="向上层递交网络层数据包">向上层递交网络层数据包</h4>
+<p>在进入运输层（如TCP、UDP例程）之前，系统会检查系统中是否有通过socket(AF_INET, SOCK_RAW, ...)创建的套接字；如果有的话并且协议相符，系统就给每个这样的socket接收缓冲区发送一个数据包拷贝（不管在任何情况下，永远都包含IP数据包头）。然后进入运输层。</p>
+<h4 id="运输层处理数据包">运输层处理数据包</h4>
+<p>这一步由系统内核来处理运输层的协议，用户层无法干涉。处理完之后，如果合法，将向用户层递交数据，进而进入用户层处理。</p>
+<h4 id="进入用户层">进入用户层</h4>
+<p>这一层在用户态，由用户应用程序来完成。</p>
+<hr>
+<h3 id="数据包格式">数据包格式</h3>
+<p>下图是数据包的组成
+<img src="/2019/11/02/2019/Linux下的rawsocket/Ethernet-Important-Concept.png" alt title="数据包"></p>
+<h4 id="链路层数据包">链路层数据包</h4>
+<p>链路层的数据包格式如下图所示：
+<img src="/2019/11/02/2019/Linux下的rawsocket/700px-Ethernet_Type_II_Frame_format.png" alt title="以太网包头">
+以太网数据包头由一个结构体来描述</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct ethhdr &#123;</span><br><span class="line">	unsigned char	h_dest[ETH_ALEN];	/* destination eth addr，目的MAC地址	*/</span><br><span class="line">	unsigned char	h_source[ETH_ALEN];	/* source ether addr，源MAC地址	*/</span><br><span class="line">	__be16		h_proto;		/* packet type ID field）	*/</span><br><span class="line">&#125; __attribute__((packed));</span><br></pre></td></tr></table></figure>
+<p>其中，h_proto指明了下一层协议的编号，如果其值为0x800(ETH_P_IP)，就表明下一层的数据包头是IP数据包的包头</p>
+<h4 id="网络层数据包">网络层数据包</h4>
+<p>ip数据包首部的结构如下图所示：
+<img src="/2019/11/02/2019/Linux下的rawsocket/ipheader.png" alt title="ip数据包包头">
+由下面的结构体定义（ip.h）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">struct iphdr &#123;</span><br><span class="line">#if defined(__LITTLE_ENDIAN_BITFIELD)</span><br><span class="line">	__u8	ihl:4,</span><br><span class="line">		version:4;</span><br><span class="line">#elif defined (__BIG_ENDIAN_BITFIELD)</span><br><span class="line">	__u8	version:4, //IPV4</span><br><span class="line">  		ihl:4; // 首部长度，单位：4字节(注意这里的单位，如果要得到整个ip首部的长度，计算公式为:ihl*4)</span><br><span class="line">#else</span><br><span class="line">#error	&quot;Please fix &lt;asm/byteorder.h&gt;&quot;</span><br><span class="line">#endif</span><br><span class="line">	__u8	tos;    // type of service，服务类型</span><br><span class="line">	__be16	tot_len; // 总长度：首部及数据之和的长度</span><br><span class="line">	__be16	id; // 每产生一个数据报，其值加1，分片后的数据包具有同样的id</span><br><span class="line">	__be16	frag_off; // 片偏移，某片在原分组中的相对位置.也就是说,相对用户数据字段的起点,该片从何处开始.</span><br><span class="line">	__u8	ttl;</span><br><span class="line">	__u8	protocol; // 上层协议号，以便使目的主机的IP层知道应将数据部分上交给哪个处理过程，6（TCP），17（UDP）</span><br><span class="line">	__sum16	check;</span><br><span class="line">	__be32	saddr;</span><br><span class="line">	__be32	daddr;</span><br><span class="line">	/*The options start here. */</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="运输层数据包">运输层数据包</h4>
+<p>运输层的协议有很多种，本文主要分析TCP和UDP，下图所示为TCP首部的格式：
+<img src="/2019/11/02/2019/Linux下的rawsocket/tcpheader.png" alt title="tcp数据包首部"></p>
+<p>TCP的数据报首部在tcp.h文件中定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">struct tcphdr &#123;</span><br><span class="line">	__be16	source;</span><br><span class="line">	__be16	dest;</span><br><span class="line">	__be32	seq;</span><br><span class="line">	__be32	ack_seq;</span><br><span class="line">#if defined(__LITTLE_ENDIAN_BITFIELD)</span><br><span class="line">	__u16	res1:4,</span><br><span class="line">		doff:4,</span><br><span class="line">		fin:1,</span><br><span class="line">		syn:1,</span><br><span class="line">		rst:1,</span><br><span class="line">		psh:1,</span><br><span class="line">		ack:1,</span><br><span class="line">		urg:1,</span><br><span class="line">		ece:1,</span><br><span class="line">		cwr:1;</span><br><span class="line">#elif defined(__BIG_ENDIAN_BITFIELD)</span><br><span class="line">	__u16	doff:4,</span><br><span class="line">		res1:4,</span><br><span class="line">		cwr:1,</span><br><span class="line">		ece:1,</span><br><span class="line">		urg:1,</span><br><span class="line">		ack:1,</span><br><span class="line">		psh:1,</span><br><span class="line">		rst:1,</span><br><span class="line">		syn:1,</span><br><span class="line">		fin:1;</span><br><span class="line">#else</span><br><span class="line">#error	&quot;Adjust your &lt;asm/byteorder.h&gt; defines&quot;</span><br><span class="line">#endif	</span><br><span class="line">	__be16	window; // 此字段用来进行流量控制.单位为字节数,这个值是本机期望一次接收的字节数,源主机可以利用接收到的窗口值决定下一个报文段的大小</span><br><span class="line">	__sum16	check;</span><br><span class="line">	__be16	urg_ptr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>udp数据报首部的格式如下图所示：
+<img src="/2019/11/02/2019/Linux下的rawsocket/udpheader.png" alt title="udp数据包首部">
+UDP数据报首部在udp.h文件中定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct udphdr &#123;</span><br><span class="line">	__be16	source;</span><br><span class="line">	__be16	dest;</span><br><span class="line">	__be16	len;</span><br><span class="line">	__sum16	check;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="编写raw-socket">编写raw socket</h3>
+<p>raw socket的函数原型是：socket(int socket_family, int socket_type, int protocol);</p>
+<p>一共有三种方式来创建raw socket</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">socket(AF_INET, SOCK_RAW, IPPROTO_XXX)           // 发送、接收网络层IP数据包，</span><br><span class="line">socket(AF_PACKET/PF_PACKET, SOCK_RAW, htons(ETH_P_XXX))    // 发送、接收数据链路层数据帧（目前只有Linux支持）</span><br><span class="line">socket(AF_INET, SOCK_PACKET, htons(ETH_P_XXX))   // 过时了</span><br></pre></td></tr></table></figure>
+<p>下面分别讨论前两种方式的raw socket：</p>
+<ul>
+<li>
+<p><strong>第一种</strong>，socket(AF_INET, SOCK_RAW, IPPROTO_XXX)；这个socket比较适合写ping程序</p>
+<ul>
+<li>这个SOCKET接收的数据是包含IP头的IP数据包（不管protocol是任何协议），并且是已经重组好的IP包（协议类型为IPPROTO_XXX且发往本机的IP数据包）。</li>
+<li>注意：<strong>不能捕获目的IP非本机的数据包（在网络层会被过滤掉），也不能捕获从本机发送的数据包</strong></li>
+<li>如果protocol是IPPROTO_RAW(255)，这时候，这个socket只能用来发送IP包，而不能接收任何的数据。发送的数据需要自己填充IP包头，并且自己计算校验和</li>
+<li>对于protocol为0（IPPROTO_IP)的raw socket。用于接收任何的IP数据包。其中的校验和和协议分析由程序自己完成。</li>
+<li>如果protocol既不是0也不是255，那么sock_raw既可以接收数据包，也可以发送数据包。</li>
+<li>如果 raw socket 没有使用 connect 函数绑定对方地址时，则应使用 sendto 或 sendmsg 函数来发送数据包，在函数参数中指定对方地址。如果使用了 connect 函数，则可以直接使用 send、write 或 writev 函数来发送数据包。</li>
+<li>如果 raw socket 调用了 bind 函数，则发送数据包的源 IP 地址将是 bind 函数指定的地址。否则，内核将以发接口的主 IP 地址填充；如果设置了 IP_HDRINCL 选项，则必须手工填充每个发送数据包的源 IP 地址。</li>
+</ul>
+</li>
+<li>
+<p><strong>第二种</strong>，socket(PF_PACKET, SOCK_RAW, htons(ETH_P_XXX))；</p>
+<ul>
+<li>这种套接字可以监听网卡上的所有数据帧，可以接收三种类型的数据帧：
+<ul>
+<li>发往本地mac的数据帧</li>
+<li>从本机发送出去的数据帧(第3个参数需要设置为 ETH_P_ALL)</li>
+<li>非发往本地mac的数据帧(网卡需要设置为 promisc 混杂模式)</li>
+</ul>
+</li>
+<li>协议类型一共有四个：
+<ul>
+<li>ETH_P_IP   0x800     只接收发往本机mac的IP类型的数据帧</li>
+<li>ETH_P_ARP  0x806     只接收发往本机mac的ARP类型的数据帧</li>
+<li>ETH_P_ARP  0x8035    只接收发往本机mac的RARP类型的数据帧</li>
+<li>ETH_P_ALL  0x3       接收发往本机mac的所有类型（IP、ARP、RARP）的数据帧，并接收从本机发出的所有类型的数据帧（混杂模式打开的情况下，会接收到非发往本地mac的数据帧）</li>
+</ul>
+</li>
+<li>发送数据帧，需要自己组织整个以太网数据帧，所有相关的地址使用struct sockaddr_ll,而不是struct sockaddr_in（因为协议簇是PF_PACKET，不是AF_INET了）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="网络嗅探">网络嗅探</h4>
+<p>下面尝试通过raw socket来实现一个网络嗅探工具的功能（类似于tcpdump），需要注意的是，只有root用户才能使用raw socket。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">#include&lt;string.h&gt;</span><br><span class="line">#include&lt;stdlib.h&gt;</span><br><span class="line">#include&lt;unistd.h&gt;</span><br><span class="line"></span><br><span class="line">#include&lt;linux/if_ether.h&gt;</span><br><span class="line"></span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">#include&lt;netinet/tcp.h&gt;</span><br><span class="line">#include&lt;netinet/ip.h&gt;</span><br><span class="line">#include&lt;netinet/udp.h&gt;</span><br><span class="line">#include &lt;netinet/in.h&gt;</span><br><span class="line">#include &lt;arpa/inet.h&gt;</span><br><span class="line"></span><br><span class="line">int sock_r;</span><br><span class="line">unsigned char *buffer;</span><br><span class="line">struct result &#123;</span><br><span class="line">    char * nextlayer;</span><br><span class="line">    int nextprotocl;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int recvMsg();</span><br><span class="line">void parseEthHeader(unsigned char *, struct result *);</span><br><span class="line">void parseIpHeader(unsigned char *, struct result *);</span><br><span class="line">void parseTCPHeader(unsigned char *, struct result *);</span><br><span class="line">void parseUDPHeader(unsigned char *, struct result *);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    sock_r = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL)); // 协议簇以 PF_ 开头，地址簇以 AF_ 开头，最好还是使用地址簇最好</span><br><span class="line">    if (sock_r &lt; 0)&#123;</span><br><span class="line">        printf(&quot;error in socket\n&quot;);</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    unsigned char *iplayerHeader;</span><br><span class="line">    unsigned char *translayerHeader;</span><br><span class="line">    struct result nextlayer;</span><br><span class="line"></span><br><span class="line">    while(1)&#123;</span><br><span class="line">        recvMsg();</span><br><span class="line">        parseEthHeader(buffer, &amp;nextlayer);</span><br><span class="line">        parseIpHeader(nextlayer.nextlayer, &amp;nextlayer);</span><br><span class="line">        if(nextlayer.nextprotocl == 6)&#123;</span><br><span class="line">            parseTCPHeader(nextlayer.nextlayer, &amp;nextlayer);</span><br><span class="line">        &#125; else if (nextlayer.nextprotocl == 17)&#123;</span><br><span class="line">            parseUDPHeader(nextlayer.nextlayer, &amp;nextlayer);</span><br><span class="line">        &#125;</span><br><span class="line">        printf(&quot;\n&quot;);</span><br><span class="line">        //sleep(1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int recvMsg() &#123;</span><br><span class="line">    buffer = (unsigned char *) malloc(65536);</span><br><span class="line">    memset(buffer, 0, 65536);</span><br><span class="line">    </span><br><span class="line">    struct sockaddr saddr;</span><br><span class="line">    int saddr_len = sizeof(saddr);</span><br><span class="line">    int buflen;</span><br><span class="line"></span><br><span class="line">    buflen = recvfrom(sock_r, buffer, 65536, 0, &amp;saddr,(socklen_t *)&amp;saddr_len);</span><br><span class="line">    if (buflen &lt; 0)&#123;</span><br><span class="line">        printf(&quot;error in reading recvfrom function\n&quot;);</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void parseEthHeader(unsigned char *buffer, struct result *nextLayerMsg) &#123;</span><br><span class="line">    struct ethhdr *eth = (struct ethhdr*)(buffer);</span><br><span class="line">    printf(&quot;Ethernet Header\n&quot;);</span><br><span class="line">    printf(&quot;\t|-Source address:%.2X-%.2X-%.2X-%.2X-%.2X-%.2X\n&quot;, eth-&gt;h_source[0], eth-&gt;h_source[1],eth-&gt;h_source[2],eth-&gt;h_source[3],eth-&gt;h_source[4],eth-&gt;h_source[5]);</span><br><span class="line">    printf(&quot;\t|-Destination address:%.2X-%.2X-%.2X-%.2X-%.2X-%.2X\n&quot;,eth-&gt;h_dest[0],eth-&gt;h_dest[1],eth-&gt;h_dest[2],eth-&gt;h_dest[3],eth-&gt;h_dest[4],eth-&gt;h_dest[5]);</span><br><span class="line">    printf(&quot;\t|-Protocol:%d\n&quot;, eth-&gt;h_proto);</span><br><span class="line"></span><br><span class="line">    unsigned char *nextlayerheader;</span><br><span class="line">    nextlayerheader = buffer + sizeof(struct ethhdr);</span><br><span class="line">    nextLayerMsg-&gt;nextlayer = nextlayerheader;</span><br><span class="line">    nextLayerMsg-&gt;nextprotocl = eth-&gt;h_proto;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void parseIpHeader(unsigned char *buffer, struct result *nextLayerMsg)&#123;</span><br><span class="line">    unsigned short iphdrlen;</span><br><span class="line">    struct iphdr *ip = (struct iphdr*)(buffer);</span><br><span class="line">    </span><br><span class="line">    iphdrlen = ip-&gt;ihl*4;</span><br><span class="line">    struct sockaddr_in source, dst;</span><br><span class="line">    memset(&amp;source, 0, sizeof(source));</span><br><span class="line">    source.sin_addr.s_addr = ip-&gt;saddr;</span><br><span class="line">    memset(&amp;dst, 0, sizeof(dst));</span><br><span class="line">    dst.sin_addr.s_addr = ip-&gt;daddr;</span><br><span class="line"></span><br><span class="line">    printf(&quot;  Ip Header\n&quot;);</span><br><span class="line">    printf(&quot;\t|-Version: %d\n&quot;, (unsigned int)ip-&gt;version);</span><br><span class="line">    printf(&quot;\t|-Type of service: %d\n&quot;, (unsigned int)ip-&gt;tos);</span><br><span class="line">    printf(&quot;\t|-Protocol: %d\n&quot;, (unsigned int)ip-&gt;protocol);</span><br><span class="line">    printf(&quot;\t|-Source IP: %s\n&quot;, inet_ntoa(source.sin_addr));</span><br><span class="line">    printf(&quot;\t|-Destination IP: %s\n&quot;, inet_ntoa(dst.sin_addr));</span><br><span class="line"></span><br><span class="line">    unsigned char *nextlayerheader;</span><br><span class="line">    nextlayerheader = buffer + sizeof(struct ethhdr) + iphdrlen;</span><br><span class="line"></span><br><span class="line">    nextLayerMsg-&gt;nextlayer = nextlayerheader;</span><br><span class="line">    nextLayerMsg-&gt;nextprotocl = ip-&gt;protocol;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void parseTCPHeader(unsigned char *buffer, struct result *nextLayerMsg)&#123;</span><br><span class="line">    struct tcphdr *tcpHeader = (struct tcphdr *)buffer;</span><br><span class="line">    printf(&quot;    TCP Header\n&quot;);</span><br><span class="line">    printf(&quot;\t|-Source Port: %d\n&quot;, ntohs(tcpHeader-&gt;source));</span><br><span class="line">    printf(&quot;\t|-Destination Port: %d\n&quot;, ntohs(tcpHeader-&gt;dest));</span><br><span class="line">    printf(&quot;\t|-Sequence Number: %d\n&quot;, ntohl(tcpHeader-&gt;seq));</span><br><span class="line">    printf(&quot;\t|-Ack Sequence: %d\n&quot;, ntohl(tcpHeader-&gt;ack_seq));</span><br><span class="line">    printf(&quot;\t|-Window size: %d\n&quot;, ntohl(tcpHeader-&gt;window));</span><br><span class="line">    </span><br><span class="line">    unsigned char * nextlayerheader;</span><br><span class="line">    nextlayerheader = buffer + sizeof(struct tcphdr);</span><br><span class="line">    nextLayerMsg-&gt;nextlayer = nextlayerheader;</span><br><span class="line">    nextLayerMsg-&gt;nextprotocl = -1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void parseUDPHeader(unsigned char *buffer, struct result *nextLayerMsg)&#123;</span><br><span class="line">    struct udphdr *udpHeader = (struct udphdr *)buffer;</span><br><span class="line">    printf(&quot;    UDP Header\n&quot;);</span><br><span class="line">    printf(&quot;\t|-Source Port: %d\n&quot;, ntohs(udpHeader-&gt;source));</span><br><span class="line">    printf(&quot;\t|-Destination Port: %d\n&quot;, ntohs(udpHeader-&gt;dest));</span><br><span class="line">    printf(&quot;\t|-Checksum: %d\n&quot;, ntohs(udpHeader-&gt;check));</span><br><span class="line"></span><br><span class="line">    unsigned char * nextlayerheader;</span><br><span class="line">    nextlayerheader = buffer + sizeof(struct udphdr);</span><br><span class="line">    nextLayerMsg-&gt;nextlayer = nextlayerheader;</span><br><span class="line">    nextLayerMsg-&gt;nextprotocl = -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="封装发包">封装发包</h4>
+<p>下面使用raw socket来封装并发送数据包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/14/2019/netlink/" rel="next" title="netlink">
+                <i class="fa fa-chevron-left"></i> netlink
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/12/11/2020/k8s学习笔记-一-k8s背景介绍/" rel="prev" title="k8s学习笔记(一) - k8s背景介绍">
+                k8s学习笔记(一) - k8s背景介绍 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Kylin</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                      
+                        <i class="fa fa-fw fa-globe"></i>豆瓣</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="知乎">
+                      
+                        <i class="fa fa-fw fa-globe"></i>知乎</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据包在协议栈内的处理流程"><span class="nav-number">1.</span> <span class="nav-text">数据包在协议栈内的处理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#网卡对数据帧进行硬过滤-数据链路层过滤"><span class="nav-number">1.1.</span> <span class="nav-text">网卡对数据帧进行硬过滤（数据链路层过滤）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向上层递交数据链路层数据帧"><span class="nav-number">1.2.</span> <span class="nav-text">向上层递交数据链路层数据帧</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网络层过滤"><span class="nav-number">1.3.</span> <span class="nav-text">网络层过滤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向上层递交网络层数据包"><span class="nav-number">1.4.</span> <span class="nav-text">向上层递交网络层数据包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运输层处理数据包"><span class="nav-number">1.5.</span> <span class="nav-text">运输层处理数据包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进入用户层"><span class="nav-number">1.6.</span> <span class="nav-text">进入用户层</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据包格式"><span class="nav-number">2.</span> <span class="nav-text">数据包格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#链路层数据包"><span class="nav-number">2.1.</span> <span class="nav-text">链路层数据包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网络层数据包"><span class="nav-number">2.2.</span> <span class="nav-text">网络层数据包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运输层数据包"><span class="nav-number">2.3.</span> <span class="nav-text">运输层数据包</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编写raw-socket"><span class="nav-number">3.</span> <span class="nav-text">编写raw socket</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#网络嗅探"><span class="nav-number">3.1.</span> <span class="nav-text">网络嗅探</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#封装发包"><span class="nav-number">3.2.</span> <span class="nav-text">封装发包</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kylin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'kylinlingh',
+            repo: 'gitment-blog',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '0a8c96148f979276e18c3c6eeb20cc90efc9dea9',
+            
+                client_id: '4f0d0cb9922a37f8ebdf'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

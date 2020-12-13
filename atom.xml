@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-11-16T11:46:34.110Z</updated>
+  <updated>2020-12-13T16:06:41.314Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,9 +17,34 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>k8s学习笔记(一) - k8s背景介绍</title>
+    <link href="http://yoursite.com/2020/12/11/2020/k8s%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%80-k8s%E8%83%8C%E6%99%AF%E4%BB%8B%E7%BB%8D/"/>
+    <id>http://yoursite.com/2020/12/11/2020/k8s学习笔记-一-k8s背景介绍/</id>
+    <published>2020-12-11T14:20:30.000Z</published>
+    <updated>2020-12-13T16:06:41.314Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;为什么需要k8s&quot;&gt;为什么需要k8s&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;隔离不同的应用，虽然可以用虚拟机的方案，但是虚拟机会消耗更多的硬件资源，而容器则是轻量级的隔离方案，除了进程本身之外，不会消耗额外的资源，从而运行更多的应用。但存在着一个问题：容器因为完全共享了同一
+      
+    
+    </summary>
+    
+      <category term="k8s学习" scheme="http://yoursite.com/categories/k8s%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="k8s" scheme="http://yoursite.com/tags/k8s/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Linux下的rawsocket</title>
-    <link href="http://yoursite.com/2019/11/02/Linux%E4%B8%8B%E7%9A%84rawsocket/"/>
-    <id>http://yoursite.com/2019/11/02/Linux下的rawsocket/</id>
+    <link href="http://yoursite.com/2019/11/02/2019/Linux%E4%B8%8B%E7%9A%84rawsocket/"/>
+    <id>http://yoursite.com/2019/11/02/2019/Linux下的rawsocket/</id>
     <published>2019-11-02T03:28:52.000Z</published>
     <updated>2019-11-16T11:46:34.110Z</updated>
     
@@ -40,8 +65,8 @@
   
   <entry>
     <title>netlink</title>
-    <link href="http://yoursite.com/2019/09/14/netlink/"/>
-    <id>http://yoursite.com/2019/09/14/netlink/</id>
+    <link href="http://yoursite.com/2019/09/14/2019/netlink/"/>
+    <id>http://yoursite.com/2019/09/14/2019/netlink/</id>
     <published>2019-09-14T02:40:00.000Z</published>
     <updated>2019-09-30T00:14:55.041Z</updated>
     
@@ -62,8 +87,8 @@
   
   <entry>
     <title>网络拓扑</title>
-    <link href="http://yoursite.com/2019/08/26/%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/"/>
-    <id>http://yoursite.com/2019/08/26/网络设备/</id>
+    <link href="http://yoursite.com/2019/08/26/2019/%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/"/>
+    <id>http://yoursite.com/2019/08/26/2019/网络设备/</id>
     <published>2019-08-26T03:23:47.000Z</published>
     <updated>2019-08-31T08:46:32.015Z</updated>
     
@@ -81,8 +106,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="http://yoursite.com/2019/08/24/hello-world/"/>
-    <id>http://yoursite.com/2019/08/24/hello-world/</id>
+    <link href="http://yoursite.com/2019/08/24/2019/hello-world/"/>
+    <id>http://yoursite.com/2019/08/24/2019/hello-world/</id>
     <published>2019-08-24T12:57:16.123Z</published>
     <updated>2019-08-24T12:57:16.123Z</updated>
     
