@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-12-14T13:46:34.650Z</updated>
+  <updated>2020-12-14T16:14:47.212Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>k8s学习笔记(二) - Docker和k8s使用笔记</title>
+    <link href="http://yoursite.com/2020/12/15/2020/k8s%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C-Docker%E5%92%8Ck8s%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"/>
+    <id>http://yoursite.com/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/</id>
+    <published>2020-12-14T16:04:04.000Z</published>
+    <updated>2020-12-14T16:14:47.212Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;镜像相关&quot;&gt;镜像相关&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;镜像的构建并不是由Docker client执行的，在构建镜像时，在构建目录下的文件都会上传到Docker daemon中，由Docker daemon来构建，所以不要在构建目录中放不相关的文件，否则会拖慢构建的进
+      
+    
+    </summary>
+    
+      <category term="k8s学习" scheme="http://yoursite.com/categories/k8s%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="k8s" scheme="http://yoursite.com/tags/k8s/"/>
+    
+  </entry>
   
   <entry>
     <title>k8s学习笔记(一) - k8s背景介绍</title>
