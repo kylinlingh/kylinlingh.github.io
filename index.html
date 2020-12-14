@@ -340,7 +340,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-14T00:06:41+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-14T21:46:34+08:00">
                 2020-12-14
               </time>
             
@@ -426,6 +426,23 @@
 <li>如果机器不能给容器提供同样的内核模块，那么容器就运行不起来</li>
 <li>在x86上构建的镜像也不能运行在ARM的机器上</li>
 </ul>
+<h2 id="k8s集群包含的组件">k8s集群包含的组件</h2>
+<p><img src="/2020/12/11/2020/k8s学习笔记-一-k8s背景介绍/%E9%9B%86%E7%BE%A4%E7%BB%84%E4%BB%B6.png" alt title="k8s的集群组件">
+k8s集群由master node和worker node组成，其中master mode运行着k8s的控制平面，用于保存和控制集群的状态，包含了以下组件：</p>
+<ul>
+<li>K8s API Server，与其他控制平面组件通信</li>
+<li>Scheduler，调度你的应用到worker node上运行</li>
+<li>Controller Manager，执行集群操作，譬如复制组件，跟踪worker node，处理node failure</li>
+<li>Etcd，一个高可用的分布式数据库，用于保存集群配置</li>
+</ul>
+<p>worker node是用于运行应用的实际机器，主要包含了以下组件：</p>
+<ul>
+<li>Docker，rkt或其他容器运行环境</li>
+<li>Kubelet，与master的API Server通信并控制容器</li>
+<li>Kube-proxy，负载均衡</li>
+</ul>
+<h2 id="容器漂移">容器漂移</h2>
+<p>如果一个应用由多个相同的容器共同提供服务，那么这些容器都会绑定到一个固定的静态IP上，由kube-proxy提供负载均衡的能力，即使这些容器发生了漂移，转移到了不同ip的机器上，也不会影响到该应用对外提供的服务。</p>
 
           
         
