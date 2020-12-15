@@ -81,18 +81,20 @@
 
 
 
-<meta name="description" content="镜像相关  镜像的构建并不是由Docker client执行的，在构建镜像时，在构建目录下的文件都会上传到Docker daemon中，由Docker daemon来构建，所以不要在构建目录中放不相关的文件，否则会拖慢构建的进度。 镜像在下载时会单独下载每一个layer，并且只下载机器上并不存在的layer Dockerfile中的每一行命令都是一个layer">
+<meta name="description" content="镜像相关  镜像的构建并不是由Docker client执行的，在构建镜像时，在构建目录下的文件都会上传到Docker daemon中，由Docker daemon来构建，所以不要在构建目录中放不相关的文件，否则会拖慢构建的进度。 镜像在下载时会单独下载每一个layer，并且只下载机器上并不存在的layer Dockerfile中的每一行命令都是一个layer  k8s命令 将kubectl设置别">
 <meta name="keywords" content="k8s">
 <meta property="og:type" content="article">
 <meta property="og:title" content="k8s学习笔记(二) - Docker和k8s使用笔记">
 <meta property="og:url" content="http://yoursite.com/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="镜像相关  镜像的构建并不是由Docker client执行的，在构建镜像时，在构建目录下的文件都会上传到Docker daemon中，由Docker daemon来构建，所以不要在构建目录中放不相关的文件，否则会拖慢构建的进度。 镜像在下载时会单独下载每一个layer，并且只下载机器上并不存在的layer Dockerfile中的每一行命令都是一个layer">
+<meta property="og:description" content="镜像相关  镜像的构建并不是由Docker client执行的，在构建镜像时，在构建目录下的文件都会上传到Docker daemon中，由Docker daemon来构建，所以不要在构建目录中放不相关的文件，否则会拖慢构建的进度。 镜像在下载时会单独下载每一个layer，并且只下载机器上并不存在的layer Dockerfile中的每一行命令都是一个layer  k8s命令 将kubectl设置别">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-12-14T16:14:47.212Z">
+<meta property="og:image" content="http://yoursite.com/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/%E5%9C%A8k8s%E4%B8%AD%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8.png">
+<meta property="og:updated_time" content="2020-12-15T15:12:13.626Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s学习笔记(二) - Docker和k8s使用笔记">
-<meta name="twitter:description" content="镜像相关  镜像的构建并不是由Docker client执行的，在构建镜像时，在构建目录下的文件都会上传到Docker daemon中，由Docker daemon来构建，所以不要在构建目录中放不相关的文件，否则会拖慢构建的进度。 镜像在下载时会单独下载每一个layer，并且只下载机器上并不存在的layer Dockerfile中的每一行命令都是一个layer">
+<meta name="twitter:description" content="镜像相关  镜像的构建并不是由Docker client执行的，在构建镜像时，在构建目录下的文件都会上传到Docker daemon中，由Docker daemon来构建，所以不要在构建目录中放不相关的文件，否则会拖慢构建的进度。 镜像在下载时会单独下载每一个layer，并且只下载机器上并不存在的layer Dockerfile中的每一行命令都是一个layer  k8s命令 将kubectl设置别">
+<meta name="twitter:image" content="http://yoursite.com/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/%E5%9C%A8k8s%E4%B8%AD%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8.png">
 
 
 
@@ -342,7 +344,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-15T00:14:47+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-15T23:12:13+08:00">
                 2020-12-15
               </time>
             
@@ -418,6 +420,28 @@
 <li>镜像的构建并不是由Docker client执行的，在构建镜像时，在构建目录下的文件都会上传到Docker daemon中，由Docker daemon来构建，所以不要在构建目录中放不相关的文件，否则会拖慢构建的进度。</li>
 <li>镜像在下载时会单独下载每一个layer，并且只下载机器上并不存在的layer</li>
 <li>Dockerfile中的每一行命令都是一个layer</li>
+</ul>
+<h2 id="k8s命令">k8s命令</h2>
+<p>将kubectl设置别名，在$HOME/.bashrc中加入下面语句
+<code>alias k=kubectl</code></p>
+<p>查看node
+<code>kubectl get nodes</code></p>
+<p>查看具体的node
+<code>kubectl describe node {nodename}</code></p>
+<p>运行image
+<code>kubectl run hello --image=nginx --port=80</code></p>
+<p>因为k8s以pod为调度单位，所以并不存在将容器列出来的命令，只有将pod列出来的命令：
+<code>kubectl get pods</code></p>
+<p>查看具体的pod
+<code>kubectl describe pod {podname}</code></p>
+<h2 id="k8s创建容器的过程">k8s创建容器的过程</h2>
+<p>在k8s中创建容器的过程如下所示：<img src="/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/%E5%9C%A8k8s%E4%B8%AD%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8.png" alt title="在k8s中运行一个容器的过程"></p>
+<ul>
+<li>在本地机器构建好镜像后，推送到镜像中心</li>
+<li>在本地机器执行kubectl run命令</li>
+<li>本地机器调用k8s的master node上的API Server，创建一个Deployment</li>
+<li>Deployment创建一个新的pod，由Scheduler调度到worker node上</li>
+<li>worker node上的kubelet看到新来的pod后就调用docker命令从镜像中心拉取镜像并运行</li>
 </ul>
 
       
@@ -643,7 +667,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像相关"><span class="nav-number">1.</span> <span class="nav-text">镜像相关</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像相关"><span class="nav-number">1.</span> <span class="nav-text">镜像相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k8s命令"><span class="nav-number">2.</span> <span class="nav-text">k8s命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k8s创建容器的过程"><span class="nav-number">3.</span> <span class="nav-text">k8s创建容器的过程</span></a></li></ol></div>
             
 
           </div>

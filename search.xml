@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[k8s学习笔记(二) - Docker和k8s使用笔记]]></title>
     <url>%2F2020%2F12%2F15%2F2020%2Fk8s%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C-Docker%E5%92%8Ck8s%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0%2F</url>
-    <content type="text"><![CDATA[镜像相关 镜像的构建并不是由Docker client执行的，在构建镜像时，在构建目录下的文件都会上传到Docker daemon中，由Docker daemon来构建，所以不要在构建目录中放不相关的文件，否则会拖慢构建的进度。 镜像在下载时会单独下载每一个layer，并且只下载机器上并不存在的layer Dockerfile中的每一行命令都是一个layer]]></content>
+    <content type="text"><![CDATA[镜像相关 镜像的构建并不是由Docker client执行的，在构建镜像时，在构建目录下的文件都会上传到Docker daemon中，由Docker daemon来构建，所以不要在构建目录中放不相关的文件，否则会拖慢构建的进度。 镜像在下载时会单独下载每一个layer，并且只下载机器上并不存在的layer Dockerfile中的每一行命令都是一个layer k8s命令 将kubectl设置别名，在$HOME/.bashrc中加入下面语句 alias k=kubectl 查看node kubectl get nodes 查看具体的node kubectl describe node {nodename} 运行image kubectl run hello --image=nginx --port=80 因为k8s以pod为调度单位，所以并不存在将容器列出来的命令，只有将pod列出来的命令： kubectl get pods 查看具体的pod kubectl describe pod {podname} k8s创建容器的过程 在k8s中创建容器的过程如下所示： 在本地机器构建好镜像后，推送到镜像中心 在本地机器执行kubectl run命令 本地机器调用k8s的master node上的API Server，创建一个Deployment Deployment创建一个新的pod，由Scheduler调度到worker node上 worker node上的kubelet看到新来的pod后就调用docker命令从镜像中心拉取镜像并运行]]></content>
       <categories>
         <category>k8s学习</category>
       </categories>
