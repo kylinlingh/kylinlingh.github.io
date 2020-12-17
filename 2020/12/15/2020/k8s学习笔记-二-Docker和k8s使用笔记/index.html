@@ -90,7 +90,8 @@
 <meta property="og:description" content="镜像相关  镜像的构建并不是由Docker client执行的，在构建镜像时，在构建目录下的文件都会上传到Docker daemon中，由Docker daemon来构建，所以不要在构建目录中放不相关的文件，否则会拖慢构建的进度。 镜像在下载时会单独下载每一个layer，并且只下载机器上并不存在的layer Dockerfile中的每一行命令都是一个layer  k8s命令 将kubectl设置别">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/%E5%9C%A8k8s%E4%B8%AD%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8.png">
-<meta property="og:updated_time" content="2020-12-15T15:12:13.626Z">
+<meta property="og:image" content="http://yoursite.com/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/%E8%AF%B7%E6%B1%82%E5%A4%84%E7%90%86%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+<meta property="og:updated_time" content="2020-12-17T15:53:28.531Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s学习笔记(二) - Docker和k8s使用笔记">
 <meta name="twitter:description" content="镜像相关  镜像的构建并不是由Docker client执行的，在构建镜像时，在构建目录下的文件都会上传到Docker daemon中，由Docker daemon来构建，所以不要在构建目录中放不相关的文件，否则会拖慢构建的进度。 镜像在下载时会单独下载每一个layer，并且只下载机器上并不存在的layer Dockerfile中的每一行命令都是一个layer  k8s命令 将kubectl设置别">
@@ -344,8 +345,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-15T23:12:13+08:00">
-                2020-12-15
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-17T23:53:28+08:00">
+                2020-12-17
               </time>
             
           </span>
@@ -432,8 +433,27 @@
 <code>kubectl run hello --image=nginx --port=80</code></p>
 <p>因为k8s以pod为调度单位，所以并不存在将容器列出来的命令，只有将pod列出来的命令：
 <code>kubectl get pods</code></p>
+<p>列出pod的更详细信息：
+<code>kubectl get pods -o wide</code></p>
 <p>查看具体的pod
 <code>kubectl describe pod {podname}</code></p>
+<p>创建LoadBalancer的Service：
+<code>kubectl expose rc {podname} --type=LoadBalancer --name {servicename}</code></p>
+<p>查看service：
+<code>kubectl get services</code></p>
+<p>查看deployment：
+<code>kubectl get deployment</code></p>
+<p>水平扩展deployment：
+<code>kubectl scale deployment {deployment-name} --replicas=3</code></p>
+<h2 id="pod">POD</h2>
+<p>查看某个pod的yaml文件：
+<code>kubectl get pod {pod-name} -o yaml</code></p>
+<p>根据yaml文件创建pod：
+<code>kubectl create -f {filename}.yaml</code></p>
+<p>使用k8s记录pod的日志：
+<code>kubectl logs {pod-name}</code></p>
+<p>如果一个pod里含有多个container，就要指定记录日志的container：
+<code>kubectl logs {pod-name} -c {con-name}</code></p>
 <h2 id="k8s创建容器的过程">k8s创建容器的过程</h2>
 <p>在k8s中创建容器的过程如下所示：<img src="/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/%E5%9C%A8k8s%E4%B8%AD%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8.png" alt title="在k8s中运行一个容器的过程"></p>
 <ul>
@@ -443,6 +463,9 @@
 <li>Deployment创建一个新的pod，由Scheduler调度到worker node上</li>
 <li>worker node上的kubelet看到新来的pod后就调用docker命令从镜像中心拉取镜像并运行</li>
 </ul>
+<h2 id="对外服务">对外服务</h2>
+<p>每个pod都有一个IP，但是该IP是内部IP，如果要想从外部访问该pod，就需要通过Service来暴露你的服务。如下图所示，由replicationcontroller控制pod的数量，每个pod都有一个单独的ip，可以与其他pod通信。请求落到service上，service对外提供一个外部ip和内部ip，service自动做负载均衡，将请求转发到不同的pod里处理。
+<img src="/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/%E8%AF%B7%E6%B1%82%E5%A4%84%E7%90%86%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt title="处理请求的过程"></p>
 
       
     </div>
@@ -482,6 +505,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/" rel="prev" title="k8s学习笔记(三) - 各种k8s元件">
+                k8s学习笔记(三) - 各种k8s元件 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -565,7 +592,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -667,7 +694,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像相关"><span class="nav-number">1.</span> <span class="nav-text">镜像相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k8s命令"><span class="nav-number">2.</span> <span class="nav-text">k8s命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k8s创建容器的过程"><span class="nav-number">3.</span> <span class="nav-text">k8s创建容器的过程</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像相关"><span class="nav-number">1.</span> <span class="nav-text">镜像相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k8s命令"><span class="nav-number">2.</span> <span class="nav-text">k8s命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pod"><span class="nav-number">3.</span> <span class="nav-text">POD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k8s创建容器的过程"><span class="nav-number">4.</span> <span class="nav-text">k8s创建容器的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对外服务"><span class="nav-number">5.</span> <span class="nav-text">对外服务</span></a></li></ol></div>
             
 
           </div>
