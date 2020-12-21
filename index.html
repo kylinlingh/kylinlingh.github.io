@@ -340,8 +340,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-17T23:54:46+08:00">
-                2020-12-17
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-21T22:14:30+08:00">
+                2020-12-21
               </time>
             
           </span>
@@ -428,6 +428,15 @@ protocol: TCP
 </li>
 </ul>
 <h2 id="端口转发">端口转发</h2>
+<p>当你想与pod通信，而又不想通过service的方式，k8s允许使用<code>kubectl port-forward</code>命令，下面的命令可以将机器的本地8888端口转发到pod的8080端口上：
+<code>kubectl port-forward {pod-name} 8888:8080</code></p>
+<h2 id="label">label</h2>
+<p>将多个容器按照某个维度打标签(key value对)，从而可以批量地对多个容器下发命令。label selector可以从三个维度来通过label过滤目标pod：</p>
+<ul>
+<li>包含（或不包含）某个key的标签</li>
+<li>包含某个key和value的标签</li>
+<li>包含某个key，并且其value等于或不等于特定值</li>
+</ul>
 
           
         
@@ -523,8 +532,8 @@ protocol: TCP
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-17T23:53:28+08:00">
-                2020-12-17
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-21T23:02:47+08:00">
+                2020-12-21
               </time>
             
           </span>
@@ -619,6 +628,22 @@ protocol: TCP
 <code>kubectl logs {pod-name}</code></p>
 <p>如果一个pod里含有多个container，就要指定记录日志的container：
 <code>kubectl logs {pod-name} -c {con-name}</code></p>
+<p>删除pod：
+<code>kubectl delete pod {pod-name}</code></p>
+<p>通过label删除pod：
+<code>kubectl delete pod -l {label-name}={label-value}</code></p>
+<p>删除所有对象：
+<code>kubectl delete all --all</code></p>
+<h2 id="label">label</h2>
+<p>给运行中的容器打上label：
+<code>kubectl label pod {podname} {labelname}={labelvalue}</code></p>
+<p>查看某个key的标签：
+<code>kubectl get pod -l {labelname}={labelvalue}</code></p>
+<p>给node打标签：
+<code>kubectl label node {node-name} {keyname}={value}</code></p>
+<h2 id="namespace">namespace</h2>
+<p>获取namespace，这个命令只能看到default的ns：<code>kubectl get ns</code></p>
+<p>创建namspace：<code>kubectl create namespace {namespace-name}</code></p>
 <h2 id="k8s创建容器的过程">k8s创建容器的过程</h2>
 <p>在k8s中创建容器的过程如下所示：<img src="/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/%E5%9C%A8k8s%E4%B8%AD%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8.png" alt title="在k8s中运行一个容器的过程"></p>
 <ul>

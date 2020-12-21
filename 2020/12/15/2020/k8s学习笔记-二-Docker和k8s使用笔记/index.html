@@ -91,7 +91,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/%E5%9C%A8k8s%E4%B8%AD%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/%E8%AF%B7%E6%B1%82%E5%A4%84%E7%90%86%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
-<meta property="og:updated_time" content="2020-12-17T15:53:28.531Z">
+<meta property="og:updated_time" content="2020-12-21T15:02:47.448Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s学习笔记(二) - Docker和k8s使用笔记">
 <meta name="twitter:description" content="镜像相关  镜像的构建并不是由Docker client执行的，在构建镜像时，在构建目录下的文件都会上传到Docker daemon中，由Docker daemon来构建，所以不要在构建目录中放不相关的文件，否则会拖慢构建的进度。 镜像在下载时会单独下载每一个layer，并且只下载机器上并不存在的layer Dockerfile中的每一行命令都是一个layer  k8s命令 将kubectl设置别">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-17T23:53:28+08:00">
-                2020-12-17
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-21T23:02:47+08:00">
+                2020-12-21
               </time>
             
           </span>
@@ -454,6 +454,22 @@
 <code>kubectl logs {pod-name}</code></p>
 <p>如果一个pod里含有多个container，就要指定记录日志的container：
 <code>kubectl logs {pod-name} -c {con-name}</code></p>
+<p>删除pod：
+<code>kubectl delete pod {pod-name}</code></p>
+<p>通过label删除pod：
+<code>kubectl delete pod -l {label-name}={label-value}</code></p>
+<p>删除所有对象：
+<code>kubectl delete all --all</code></p>
+<h2 id="label">label</h2>
+<p>给运行中的容器打上label：
+<code>kubectl label pod {podname} {labelname}={labelvalue}</code></p>
+<p>查看某个key的标签：
+<code>kubectl get pod -l {labelname}={labelvalue}</code></p>
+<p>给node打标签：
+<code>kubectl label node {node-name} {keyname}={value}</code></p>
+<h2 id="namespace">namespace</h2>
+<p>获取namespace，这个命令只能看到default的ns：<code>kubectl get ns</code></p>
+<p>创建namspace：<code>kubectl create namespace {namespace-name}</code></p>
 <h2 id="k8s创建容器的过程">k8s创建容器的过程</h2>
 <p>在k8s中创建容器的过程如下所示：<img src="/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/%E5%9C%A8k8s%E4%B8%AD%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8.png" alt title="在k8s中运行一个容器的过程"></p>
 <ul>
@@ -694,7 +710,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像相关"><span class="nav-number">1.</span> <span class="nav-text">镜像相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k8s命令"><span class="nav-number">2.</span> <span class="nav-text">k8s命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pod"><span class="nav-number">3.</span> <span class="nav-text">POD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k8s创建容器的过程"><span class="nav-number">4.</span> <span class="nav-text">k8s创建容器的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对外服务"><span class="nav-number">5.</span> <span class="nav-text">对外服务</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像相关"><span class="nav-number">1.</span> <span class="nav-text">镜像相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k8s命令"><span class="nav-number">2.</span> <span class="nav-text">k8s命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pod"><span class="nav-number">3.</span> <span class="nav-text">POD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#label"><span class="nav-number">4.</span> <span class="nav-text">label</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#namespace"><span class="nav-number">5.</span> <span class="nav-text">namespace</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k8s创建容器的过程"><span class="nav-number">6.</span> <span class="nav-text">k8s创建容器的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对外服务"><span class="nav-number">7.</span> <span class="nav-text">对外服务</span></a></li></ol></div>
             
 
           </div>

@@ -73,6 +73,8 @@
 
 
 
+  
+
 
   <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
 
@@ -90,7 +92,7 @@
 <meta property="og:description" content="POD 当一个pod含有多个容器时，这些容器都会部署在同一个node上，而不会跨node部署。  一个容器只能跑一个进程，一个应用由多个进程组成，所以将多个互相关联的容器放在一起组成一个pod，再由多个紧密相关的pod组成一个应用。同一个pod里的容器共享同一个namespace(包括：network,UTS,IPC,PID) 描述一个pod的yaml文件主要由3个主要的内容组成：  metada">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/pod%E5%B9%B6%E4%B8%8D%E4%BC%9A%E8%B7%A8node%E9%83%A8%E7%BD%B2.png">
-<meta property="og:updated_time" content="2020-12-17T15:54:46.753Z">
+<meta property="og:updated_time" content="2020-12-21T14:14:30.215Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s学习笔记(三) - 各种k8s元件">
 <meta name="twitter:description" content="POD 当一个pod含有多个容器时，这些容器都会部署在同一个node上，而不会跨node部署。  一个容器只能跑一个进程，一个应用由多个进程组成，所以将多个互相关联的容器放在一起组成一个pod，再由多个紧密相关的pod组成一个应用。同一个pod里的容器共享同一个namespace(包括：network,UTS,IPC,PID) 描述一个pod的yaml文件主要由3个主要的内容组成：  metada">
@@ -344,8 +346,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-17T23:54:46+08:00">
-                2020-12-17
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-21T22:14:30+08:00">
+                2020-12-21
               </time>
             
           </span>
@@ -445,6 +447,15 @@ protocol: TCP
 </li>
 </ul>
 <h2 id="端口转发">端口转发</h2>
+<p>当你想与pod通信，而又不想通过service的方式，k8s允许使用<code>kubectl port-forward</code>命令，下面的命令可以将机器的本地8888端口转发到pod的8080端口上：
+<code>kubectl port-forward {pod-name} 8888:8080</code></p>
+<h2 id="label">label</h2>
+<p>将多个容器按照某个维度打标签(key value对)，从而可以批量地对多个容器下发命令。label selector可以从三个维度来通过label过滤目标pod：</p>
+<ul>
+<li>包含（或不包含）某个key的标签</li>
+<li>包含某个key和value的标签</li>
+<li>包含某个key，并且其value等于或不等于特定值</li>
+</ul>
 
       
     </div>
@@ -669,7 +680,7 @@ protocol: TCP
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#pod"><span class="nav-number">1.</span> <span class="nav-text">POD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#端口转发"><span class="nav-number">2.</span> <span class="nav-text">端口转发</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#pod"><span class="nav-number">1.</span> <span class="nav-text">POD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#端口转发"><span class="nav-number">2.</span> <span class="nav-text">端口转发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#label"><span class="nav-number">3.</span> <span class="nav-text">label</span></a></li></ol></div>
             
 
           </div>
