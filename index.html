@@ -340,8 +340,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-21T22:14:30+08:00">
-                2020-12-21
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-22T21:50:10+08:00">
+                2020-12-22
               </time>
             
           </span>
@@ -398,7 +398,7 @@
       
         
           
-            <h2 id="pod">POD</h2>
+            <h1>POD</h1>
 <p>当一个pod含有多个容器时，这些容器都会部署在同一个node上，而不会跨node部署。
 <img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/pod%E5%B9%B6%E4%B8%8D%E4%BC%9A%E8%B7%A8node%E9%83%A8%E7%BD%B2.png" alt title="pod并不会跨pod部署">
 一个容器只能跑一个进程，一个应用由多个进程组成，所以将多个互相关联的容器放在一起组成一个pod，再由多个紧密相关的pod组成一个应用。同一个pod里的容器共享同一个namespace(包括：network,UTS,IPC,PID)</p>
@@ -436,6 +436,33 @@ protocol: TCP
 <li>包含（或不包含）某个key的标签</li>
 <li>包含某个key和value的标签</li>
 <li>包含某个key，并且其value等于或不等于特定值</li>
+</ul>
+<h2 id="annotation">annotation</h2>
+<p>annotation不像label，并不存在annotation selector</p>
+<h1>Deployment</h1>
+<p>如果手动创建了一个pod，并且该pod被调度到node上运行，kubelet就会保证这个pod一直运行下去，即使该pod的进程崩溃，kubelet也会自动重启这个pod，因此k8s里运行的app可以自愈。但是存在一个问题，如果该pod的进程出现了bug，不能正常响应（譬如出现了死锁），k8s并不能主动重启该pod。k8s可以通过心跳检测来检查pod的进程，有三种检测方法：</p>
+<ul>
+<li>HTTP Get请求，返回值为2xx或3xx就正常，否则就重启容器</li>
+<li>TCP socket，只要能成功建立socket连接就说明正常，否则就重启容器</li>
+<li>在容器内部执行Exec调用，检查执行的结果值是否为0</li>
+</ul>
+<p>定义一个通过http请求做心跳检测的pod
+`
+apiVersion: v1
+kind: Pod
+metadata:
+name: kubia-liveness
+spec:
+containers:</p>
+<ul>
+<li>image: luksa/kubia-unhealthy
+name: kubia
+livenessProbe:
+httpGet:
+path: /
+port: 8080
+initialDelaySeconds: 15 # 一定要设置该值，否则在pod启动后就马上进行探测，而pod由于还未就绪就会响应失败，从而导致pod被重启
+`</li>
 </ul>
 
           
@@ -532,8 +559,8 @@ protocol: TCP
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-21T23:02:47+08:00">
-                2020-12-21
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-22T21:44:01+08:00">
+                2020-12-22
               </time>
             
           </span>
@@ -626,6 +653,8 @@ protocol: TCP
 <code>kubectl create -f {filename}.yaml</code></p>
 <p>使用k8s记录pod的日志：
 <code>kubectl logs {pod-name}</code></p>
+<p>如果pod已经重启过，但是想看重启前的pod的log:
+<code>kubectl logs {pod-name} --previous</code></p>
 <p>如果一个pod里含有多个container，就要指定记录日志的container：
 <code>kubectl logs {pod-name} -c {con-name}</code></p>
 <p>删除pod：

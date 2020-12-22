@@ -91,7 +91,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/%E5%9C%A8k8s%E4%B8%AD%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/%E8%AF%B7%E6%B1%82%E5%A4%84%E7%90%86%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
-<meta property="og:updated_time" content="2020-12-21T15:02:47.448Z">
+<meta property="og:updated_time" content="2020-12-22T13:44:01.733Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s学习笔记(二) - Docker和k8s使用笔记">
 <meta name="twitter:description" content="镜像相关  镜像的构建并不是由Docker client执行的，在构建镜像时，在构建目录下的文件都会上传到Docker daemon中，由Docker daemon来构建，所以不要在构建目录中放不相关的文件，否则会拖慢构建的进度。 镜像在下载时会单独下载每一个layer，并且只下载机器上并不存在的layer Dockerfile中的每一行命令都是一个layer  k8s命令 将kubectl设置别">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-21T23:02:47+08:00">
-                2020-12-21
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-22T21:44:01+08:00">
+                2020-12-22
               </time>
             
           </span>
@@ -452,6 +452,8 @@
 <code>kubectl create -f {filename}.yaml</code></p>
 <p>使用k8s记录pod的日志：
 <code>kubectl logs {pod-name}</code></p>
+<p>如果pod已经重启过，但是想看重启前的pod的log:
+<code>kubectl logs {pod-name} --previous</code></p>
 <p>如果一个pod里含有多个container，就要指定记录日志的container：
 <code>kubectl logs {pod-name} -c {con-name}</code></p>
 <p>删除pod：
