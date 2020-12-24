@@ -91,7 +91,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/%E5%9C%A8k8s%E4%B8%AD%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/%E8%AF%B7%E6%B1%82%E5%A4%84%E7%90%86%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
-<meta property="og:updated_time" content="2020-12-22T13:44:01.733Z">
+<meta property="og:updated_time" content="2020-12-23T14:51:22.207Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s学习笔记(二) - Docker和k8s使用笔记">
 <meta name="twitter:description" content="镜像相关  镜像的构建并不是由Docker client执行的，在构建镜像时，在构建目录下的文件都会上传到Docker daemon中，由Docker daemon来构建，所以不要在构建目录中放不相关的文件，否则会拖慢构建的进度。 镜像在下载时会单独下载每一个layer，并且只下载机器上并不存在的layer Dockerfile中的每一行命令都是一个layer  k8s命令 将kubectl设置别">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-22T21:44:01+08:00">
-                2020-12-22
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-23T22:51:22+08:00">
+                2020-12-23
               </time>
             
           </span>
@@ -467,11 +467,25 @@
 <code>kubectl label pod {podname} {labelname}={labelvalue}</code></p>
 <p>查看某个key的标签：
 <code>kubectl get pod -l {labelname}={labelvalue}</code></p>
+<p>查看pod的全部label：
+<code>kubectl get pods --show-labels</code></p>
+<p>强制覆盖pod的标签：
+<code>kubectl label pod kubia-dmdck {labelname}={labelvalue} --overwrite</code></p>
 <p>给node打标签：
 <code>kubectl label node {node-name} {keyname}={value}</code></p>
 <h2 id="namespace">namespace</h2>
 <p>获取namespace，这个命令只能看到default的ns：<code>kubectl get ns</code></p>
 <p>创建namspace：<code>kubectl create namespace {namespace-name}</code></p>
+<h2 id="replicationcontroller">ReplicationController</h2>
+<p>修改rc：
+<code>kubectl edit rc {rcname}</code></p>
+<p>水平扩展pod的数量
+<code>kubectl scale rc {rcname} --replicas=10</code></p>
+<p>删除ReplicationController后仍然保存之前创建的pod，即使在删除了ReplicationController后，只要重新写一个正确的label selector的rc，仍然可以接管这些pod：
+<code>kubectl delete rc {rcname} --cascade=false</code></p>
+<h2 id="replicaset">Replicaset</h2>
+<p>查看rs：
+<code>kubectl get rs</code></p>
 <h2 id="k8s创建容器的过程">k8s创建容器的过程</h2>
 <p>在k8s中创建容器的过程如下所示：<img src="/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/%E5%9C%A8k8s%E4%B8%AD%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8.png" alt title="在k8s中运行一个容器的过程"></p>
 <ul>
@@ -712,7 +726,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像相关"><span class="nav-number">1.</span> <span class="nav-text">镜像相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k8s命令"><span class="nav-number">2.</span> <span class="nav-text">k8s命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pod"><span class="nav-number">3.</span> <span class="nav-text">POD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#label"><span class="nav-number">4.</span> <span class="nav-text">label</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#namespace"><span class="nav-number">5.</span> <span class="nav-text">namespace</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k8s创建容器的过程"><span class="nav-number">6.</span> <span class="nav-text">k8s创建容器的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对外服务"><span class="nav-number">7.</span> <span class="nav-text">对外服务</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像相关"><span class="nav-number">1.</span> <span class="nav-text">镜像相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k8s命令"><span class="nav-number">2.</span> <span class="nav-text">k8s命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pod"><span class="nav-number">3.</span> <span class="nav-text">POD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#label"><span class="nav-number">4.</span> <span class="nav-text">label</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#namespace"><span class="nav-number">5.</span> <span class="nav-text">namespace</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#replicationcontroller"><span class="nav-number">6.</span> <span class="nav-text">ReplicationController</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#replicaset"><span class="nav-number">7.</span> <span class="nav-text">Replicaset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k8s创建容器的过程"><span class="nav-number">8.</span> <span class="nav-text">k8s创建容器的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对外服务"><span class="nav-number">9.</span> <span class="nav-text">对外服务</span></a></li></ol></div>
             
 
           </div>

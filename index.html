@@ -340,8 +340,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-22T21:50:10+08:00">
-                2020-12-22
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-24T21:51:43+08:00">
+                2020-12-24
               </time>
             
           </span>
@@ -439,6 +439,49 @@ protocol: TCP
 </ul>
 <h2 id="annotation">annotation</h2>
 <p>annotation不像label，并不存在annotation selector</p>
+<h1>ReplicationController</h1>
+<p>ReplicationController用来控制k8s中运行的pod数量，使其符合用户的预期，流程如下：主要是通过label selector来选择对应的pod：<img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/replicationcontroller.png" alt title="replicationcontroller的工作机制"></p>
+<p>ReplicationController包含了三个重要的组成部分：</p>
+<ul>
+<li>label selector，用于选择pod</li>
+<li>replica count，用户期望的pod数量</li>
+<li>pod template，用来创建新的pod</li>
+</ul>
+<p>一个ReplicationController的例子（不需要指定label selector，因为会从template中自动产生）：
+<code>apiVersion: v1 kind: ReplicationController metadata: name: kubia spec: replicas: 3 selector: app: kubia template: metadata: labels: app: kubia spec: containers: - name: kubia image: luksa/kubia ports: - containerPort: 8080</code></p>
+<p>当你需要debug一个pod的时候，可以通过修改pod的label，从而将该pod移除出ReplicationController的纳管范围之内，让ReplicationController重新起一个pod来对外服务。</p>
+<p>升级pod的方法：修改ReplicationController的templcate后删除旧pod，从而根据新的pod template创建新的pod</p>
+<h1>ReplicaSet</h1>
+<p>Replicaset的作用与ReplicationController几乎一样，只是丰富了pod selector的方法。譬如Replicaset只需要label中有同样的key就可以做分组选择，而ReplicationController则需要key和value都一致才能做分组选择。ReplicaSet的label selector包含几个关键字：key，operator，values，其中有四个有效的operator：</p>
+<ul>
+<li>In，label的值必须匹配values中的其中一个</li>
+<li>NotIn，label的值必须不能是其中之一</li>
+<li>Exists，label必须是指定之一，并且不能指定values</li>
+<li>DoesNotExist，label不能是这其中之一，并且不能指定values
+`
+selector:
+matchExpressions:
+<ul>
+<li>key: app<br>
+operator: In<br>
+values:
+<ul>
+<li>kubia<br>
+`</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1>DaemonSet</h1>
+<p>使得每个node上运行且运行一个特定的pod，可以用于收集日志或做kube-proxy，如下所示，只要node的标签为disk=ssd，就会自动部署一个pod上去
+<code>apiVersion: apps/v1beta2 kind: DaemonSet metadata: name: ssd-monitor spec: selector: matchLabels: app: ssd-monitor template: metadata: labels: app: ssd-monitor spec: nodeSelector: disk: ssd containers: - name: main image: luksa/ssd-monitor</code></p>
+<h1>Job</h1>
+<p>当pod的任务完成之后，容器并不会再次重启，而是彻底的终结
+<code>apiVersion: batch/v1 kind: Job metadata: name: batch-job spec: completions: 5 # 指定这个job的运行次数，一次任务创建并运行一个pod parallelism： 2 # 可以同时运行的pod数量 template: metadata: labels: app: batch-job spec: restartPolicy: OnFailure # 当pod的进程执行完毕后，k8s的重启策略，默认为Always，一般只能该为OnFailure或Never containers: - name: main image: luksa/batch-job</code></p>
+<h1>CronJob</h1>
+<p>周期性任务
+<code>apiVersion: batch/v1beta1 kind: CronJob metadata: name: batch-job-every-fifteen-minutes spec: schedule: &quot;0,15,30,45 * * * *&quot; jobTemplate: spec: template: metadata: labels: app: periodic-batch-job spec: restartPolicy: OnFailure containers: - name: main image: luksa/batch-job</code></p>
 <h1>Deployment</h1>
 <p>如果手动创建了一个pod，并且该pod被调度到node上运行，kubelet就会保证这个pod一直运行下去，即使该pod的进程崩溃，kubelet也会自动重启这个pod，因此k8s里运行的app可以自愈。但是存在一个问题，如果该pod的进程出现了bug，不能正常响应（譬如出现了死锁），k8s并不能主动重启该pod。k8s可以通过心跳检测来检查pod的进程，有三种检测方法：</p>
 <ul>
@@ -559,8 +602,8 @@ initialDelaySeconds: 15 # 一定要设置该值，否则在pod启动后就马上
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-22T21:44:01+08:00">
-                2020-12-22
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-23T22:51:22+08:00">
+                2020-12-23
               </time>
             
           </span>
@@ -668,11 +711,25 @@ initialDelaySeconds: 15 # 一定要设置该值，否则在pod启动后就马上
 <code>kubectl label pod {podname} {labelname}={labelvalue}</code></p>
 <p>查看某个key的标签：
 <code>kubectl get pod -l {labelname}={labelvalue}</code></p>
+<p>查看pod的全部label：
+<code>kubectl get pods --show-labels</code></p>
+<p>强制覆盖pod的标签：
+<code>kubectl label pod kubia-dmdck {labelname}={labelvalue} --overwrite</code></p>
 <p>给node打标签：
 <code>kubectl label node {node-name} {keyname}={value}</code></p>
 <h2 id="namespace">namespace</h2>
 <p>获取namespace，这个命令只能看到default的ns：<code>kubectl get ns</code></p>
 <p>创建namspace：<code>kubectl create namespace {namespace-name}</code></p>
+<h2 id="replicationcontroller">ReplicationController</h2>
+<p>修改rc：
+<code>kubectl edit rc {rcname}</code></p>
+<p>水平扩展pod的数量
+<code>kubectl scale rc {rcname} --replicas=10</code></p>
+<p>删除ReplicationController后仍然保存之前创建的pod，即使在删除了ReplicationController后，只要重新写一个正确的label selector的rc，仍然可以接管这些pod：
+<code>kubectl delete rc {rcname} --cascade=false</code></p>
+<h2 id="replicaset">Replicaset</h2>
+<p>查看rs：
+<code>kubectl get rs</code></p>
 <h2 id="k8s创建容器的过程">k8s创建容器的过程</h2>
 <p>在k8s中创建容器的过程如下所示：<img src="/2020/12/15/2020/k8s学习笔记-二-Docker和k8s使用笔记/%E5%9C%A8k8s%E4%B8%AD%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8.png" alt title="在k8s中运行一个容器的过程"></p>
 <ul>
