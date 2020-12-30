@@ -93,7 +93,7 @@
 <meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/replicationcontroller.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/NodePort.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/loadBalancer.png">
-<meta property="og:updated_time" content="2020-12-30T13:32:35.913Z">
+<meta property="og:updated_time" content="2020-12-30T13:40:01.613Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s学习笔记(三) - 各种k8s元件">
 <meta name="twitter:description" content="POD 当一个pod含有多个容器时，这些容器都会部署在同一个node上，而不会跨node部署。  一个容器只能跑一个进程，一个应用由多个进程组成，所以将多个互相关联的容器放在一起组成一个pod，再由多个紧密相关的pod组成一个应用。同一个pod里的容器共享同一个namespace(包括：network,UTS,IPC,PID) 描述一个pod的yaml文件主要由3个主要的内容组成：  metada">
@@ -347,7 +347,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-30T21:32:35+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-30T21:40:01+08:00">
                 2020-12-30
               </time>
             
@@ -429,8 +429,7 @@
 <li>status描述了pod的当前运行状态信息，包括ip等（在创建新pod时，status是完全不存在的）</li>
 </ul>
 <p>一份简单的yaml文件：
-`
-apiVersion: v1
+`apiVersion: v1
 kind: Pod
 metadata:
 name: nginx-manual
@@ -478,8 +477,7 @@ protocol: TCP
 <li>NotIn，label的值必须不能是其中之一</li>
 <li>Exists，label必须是指定之一，并且不能指定values</li>
 <li>DoesNotExist，label不能是这其中之一，并且不能指定values
-`
-selector:
+`selector:
 matchExpressions:
 <ul>
 <li>key: app<br>
@@ -503,8 +501,7 @@ values:
 <p>周期性任务
 <code>apiVersion: batch/v1beta1 kind: CronJob metadata: name: batch-job-every-fifteen-minutes spec: schedule: &quot;0,15,30,45 * * * *&quot; jobTemplate: spec: template: metadata: labels: app: periodic-batch-job spec: restartPolicy: OnFailure containers: - name: main image: luksa/batch-job</code></p>
 <h1>Service</h1>
-<p>`
-apiVersion: v1
+<p>`apiVersion: v1
 kind: Service
 metadata:
 name: kubia
@@ -533,8 +530,7 @@ app: kubia
 <h2 id="nodeport">NodePort</h2>
 <p>从下图可以看到NodePort的工作模式，NodePort绑定了node的30123端口，当外部请求落在node的30123端口上之后，该node会转发请求到service上，由service再选择一个pod来响应。
 <img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/NodePort.png" alt title="NodePort的工作模式">
-`
-apiVersion: v1
+`apiVersion: v1
 kind: Service
 metadata:
 name: kubia-nodeport
@@ -552,8 +548,7 @@ app: kubia
 <h2 id="loadbalancer">LoadBalancer</h2>
 <p>从下图可以看到LoadBalancer的工作模式，外部请求先落到LoadBalancer的80端口上，然后由LoadBalancer随机选择一个node来转发请求，再由service将请求随机落到不同的pod上。
 <img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/loadBalancer.png" alt title="LoadBalancer的工作模式">
-`
-apiVersion: v1
+`apiVersion: v1
 kind: Service
 metadata:
 name: kubia-loadbalancer
