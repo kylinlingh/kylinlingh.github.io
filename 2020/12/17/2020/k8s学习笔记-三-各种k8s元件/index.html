@@ -93,7 +93,7 @@
 <meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/replicationcontroller.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/NodePort.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/loadBalancer.png">
-<meta property="og:updated_time" content="2020-12-30T13:40:01.613Z">
+<meta property="og:updated_time" content="2020-12-30T13:42:37.024Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s学习笔记(三) - 各种k8s元件">
 <meta name="twitter:description" content="POD 当一个pod含有多个容器时，这些容器都会部署在同一个node上，而不会跨node部署。  一个容器只能跑一个进程，一个应用由多个进程组成，所以将多个互相关联的容器放在一起组成一个pod，再由多个紧密相关的pod组成一个应用。同一个pod里的容器共享同一个namespace(包括：network,UTS,IPC,PID) 描述一个pod的yaml文件主要由3个主要的内容组成：  metada">
@@ -347,7 +347,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-30T21:40:01+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-30T21:42:37+08:00">
                 2020-12-30
               </time>
             
@@ -428,24 +428,8 @@
 <li>spce描述了pod的的组成内容，如containers, volumes等</li>
 <li>status描述了pod的当前运行状态信息，包括ip等（在创建新pod时，status是完全不存在的）</li>
 </ul>
-<p>一份简单的yaml文件：
-`apiVersion: v1
-kind: Pod
-metadata:
-name: nginx-manual
-spec:
-containers:</p>
-<ul>
-<li>image: nginx:1.8
-name: nginx
-ports:
-<ul>
-<li>containerPort: 80
-protocol: TCP
-`</li>
-</ul>
-</li>
-</ul>
+<p>一份简单的yaml文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: nginx-manual</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - image: nginx:1.8</span><br><span class="line">    name: nginx</span><br><span class="line">    ports:</span><br><span class="line">    - containerPort: 80</span><br><span class="line">      protocol: TCP</span><br></pre></td></tr></table></figure>
 <h2 id="端口转发">端口转发</h2>
 <p>当你想与pod通信，而又不想通过service的方式，k8s允许使用<code>kubectl port-forward</code>命令，下面的命令可以将机器的本地8888端口转发到pod的8080端口上：
 <code>kubectl port-forward {pod-name} 8888:8080</code></p>
@@ -466,8 +450,8 @@ protocol: TCP
 <li>replica count，用户期望的pod数量</li>
 <li>pod template，用来创建新的pod</li>
 </ul>
-<p>一个ReplicationController的例子（不需要指定label selector，因为会从template中自动产生）：
-<code>apiVersion: v1 kind: ReplicationController metadata: name: kubia spec: replicas: 3 selector: app: kubia template: metadata: labels: app: kubia spec: containers: - name: kubia image: luksa/kubia ports: - containerPort: 8080</code></p>
+<p>一个ReplicationController的例子（不需要指定label selector，因为会从template中自动产生）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: ReplicationController</span><br><span class="line">metadata:</span><br><span class="line">  name: kubia</span><br><span class="line">spec:</span><br><span class="line">  replicas: 3</span><br><span class="line">  selector:</span><br><span class="line">    app: kubia</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: kubia</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">      - name: kubia</span><br><span class="line">        image: luksa/kubia</span><br><span class="line">        ports:</span><br><span class="line">        - containerPort: 8080</span><br></pre></td></tr></table></figure>
 <p>当你需要debug一个pod的时候，可以通过修改pod的label，从而将该pod移除出ReplicationController的纳管范围之内，让ReplicationController重新起一个pod来对外服务。</p>
 <p>升级pod的方法：修改ReplicationController的templcate后删除旧pod，从而根据新的pod template创建新的pod</p>
 <h1>ReplicaSet</h1>
@@ -476,50 +460,21 @@ protocol: TCP
 <li>In，label的值必须匹配values中的其中一个</li>
 <li>NotIn，label的值必须不能是其中之一</li>
 <li>Exists，label必须是指定之一，并且不能指定values</li>
-<li>DoesNotExist，label不能是这其中之一，并且不能指定values
-`selector:
-matchExpressions:
-<ul>
-<li>key: app<br>
-operator: In<br>
-values:
-<ul>
-<li>kubia<br>
-`</li>
+<li>DoesNotExist，label不能是这其中之一，并且不能指定values</li>
 </ul>
-</li>
-</ul>
-</li>
-</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">selector:</span><br><span class="line">   matchExpressions:                 </span><br><span class="line">     - key: app           </span><br><span class="line">       operator: In                  </span><br><span class="line">       values:                       </span><br><span class="line">         - kubia</span><br></pre></td></tr></table></figure>
 <h1>DaemonSet</h1>
-<p>使得每个node上运行且运行一个特定的pod，可以用于收集日志或做kube-proxy，如下所示，只要node的标签为disk=ssd，就会自动部署一个pod上去
-<code>apiVersion: apps/v1beta2 kind: DaemonSet metadata: name: ssd-monitor spec: selector: matchLabels: app: ssd-monitor template: metadata: labels: app: ssd-monitor spec: nodeSelector: disk: ssd containers: - name: main image: luksa/ssd-monitor</code></p>
+<p>使得每个node上运行且运行一个特定的pod，可以用于收集日志或做kube-proxy，如下所示，只要node的标签为disk=ssd，就会自动部署一个pod上去</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: apps/v1beta2      </span><br><span class="line">kind: DaemonSet                     </span><br><span class="line">metadata:</span><br><span class="line">  name: ssd-monitor</span><br><span class="line">spec:                            </span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: ssd-monitor</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: ssd-monitor</span><br><span class="line">    spec:</span><br><span class="line">      nodeSelector:                </span><br><span class="line">        disk: ssd                  </span><br><span class="line">      containers:</span><br><span class="line">      - name: main</span><br><span class="line">        image: luksa/ssd-monitor</span><br></pre></td></tr></table></figure>
 <h1>Job</h1>
-<p>当pod的任务完成之后，容器并不会再次重启，而是彻底的终结
-<code>apiVersion: batch/v1 kind: Job metadata: name: batch-job spec: completions: 5 # 指定这个job的运行次数，一次任务创建并运行一个pod parallelism： 2 # 可以同时运行的pod数量 template: metadata: labels: app: batch-job spec: restartPolicy: OnFailure # 当pod的进程执行完毕后，k8s的重启策略，默认为Always，一般只能该为OnFailure或Never containers: - name: main image: luksa/batch-job</code></p>
+<p>当pod的任务完成之后，容器并不会再次重启，而是彻底的终结</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: batch/v1</span><br><span class="line">kind: Job</span><br><span class="line">metadata:</span><br><span class="line">  name: batch-job</span><br><span class="line">spec:</span><br><span class="line">  completions: 5 # 指定这个job的运行次数，一次任务创建并运行一个pod</span><br><span class="line">  parallelism： 2 # 可以同时运行的pod数量</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: batch-job</span><br><span class="line">    spec:</span><br><span class="line">      restartPolicy: OnFailure # 当pod的进程执行完毕后，k8s的重启策略，默认为Always，一般只能该为OnFailure或Never</span><br><span class="line">      containers:</span><br><span class="line">      - name: main</span><br><span class="line">        image: luksa/batch-job</span><br></pre></td></tr></table></figure>
 <h1>CronJob</h1>
-<p>周期性任务
-<code>apiVersion: batch/v1beta1 kind: CronJob metadata: name: batch-job-every-fifteen-minutes spec: schedule: &quot;0,15,30,45 * * * *&quot; jobTemplate: spec: template: metadata: labels: app: periodic-batch-job spec: restartPolicy: OnFailure containers: - name: main image: luksa/batch-job</code></p>
+<p>周期性任务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: batch/v1beta1               </span><br><span class="line">kind: CronJob</span><br><span class="line">metadata:</span><br><span class="line">  name: batch-job-every-fifteen-minutes</span><br><span class="line">spec:</span><br><span class="line">  schedule: &quot;0,15,30,45 * * * *&quot;           </span><br><span class="line">  jobTemplate:</span><br><span class="line">    spec:</span><br><span class="line">      template:                            </span><br><span class="line">        metadata:                          </span><br><span class="line">          labels:                          </span><br><span class="line">            app: periodic-batch-job        </span><br><span class="line">        spec:                              </span><br><span class="line">          restartPolicy: OnFailure         </span><br><span class="line">          containers:                      </span><br><span class="line">          - name: main                     </span><br><span class="line">            image: luksa/batch-job</span><br></pre></td></tr></table></figure>
 <h1>Service</h1>
-<p>`apiVersion: v1
-kind: Service
-metadata:
-name: kubia
-spec:
-ports:</p>
-<ul>
-<li>name: http     # 当一次性暴露多个端口时，需要指定name<br>
-port: 80              #对外暴露80端口<br>
-targetPort: 8080      # 将每个链接路由到其中一个pod的8080端口上</li>
-<li>name: https<br>
-port: 443<br>
-targetPort: 8443<br>
-selector:
-app: kubia
-`
-往集群里的service发送请求的几种方法：</li>
-<li></li>
-</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: kubia</span><br><span class="line">spec:</span><br><span class="line">  ports:</span><br><span class="line">  - name: http     # 当一次性暴露多个端口时，需要指定name         </span><br><span class="line">    port: 80              #对外暴露80端口  </span><br><span class="line">    targetPort: 8080      # 将每个链接路由到其中一个pod的8080端口上  </span><br><span class="line">  - name: https             </span><br><span class="line">    port: 443               </span><br><span class="line">    targetPort: 8443  </span><br><span class="line">  selector:</span><br><span class="line">    app: kubia</span><br></pre></td></tr></table></figure>
+<h2 id="往集群里的service发送请求的几种方法：">往集群里的service发送请求的几种方法：</h2>
 <p>一个service的ip可以通过curl探活，但是不能通过ping来探活，因为service的集群ip是一个虚拟ip，必须和端口结合才能使用</p>
 <p>将一个服务暴露到公网，大概有三种方法：</p>
 <ul>
@@ -529,39 +484,12 @@ app: kubia
 </ul>
 <h2 id="nodeport">NodePort</h2>
 <p>从下图可以看到NodePort的工作模式，NodePort绑定了node的30123端口，当外部请求落在node的30123端口上之后，该node会转发请求到service上，由service再选择一个pod来响应。
-<img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/NodePort.png" alt title="NodePort的工作模式">
-`apiVersion: v1
-kind: Service
-metadata:
-name: kubia-nodeport
-spec:
-type: NodePort # 指定该service的类型是NodePort
-ports:</p>
-<ul>
-<li>port: 80
-targetPort: 8080
-nodePort: 30123
-selector:
-app: kubia
-`</li>
-</ul>
+<img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/NodePort.png" alt title="NodePort的工作模式"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: kubia-nodeport</span><br><span class="line">spec:</span><br><span class="line">  type: NodePort # 指定该service的类型是NodePort</span><br><span class="line">  ports:</span><br><span class="line">  - port: 80</span><br><span class="line">    targetPort: 8080</span><br><span class="line">    nodePort: 30123</span><br><span class="line">  selector:</span><br><span class="line">    app: kubia</span><br></pre></td></tr></table></figure>
 <h2 id="loadbalancer">LoadBalancer</h2>
 <p>从下图可以看到LoadBalancer的工作模式，外部请求先落到LoadBalancer的80端口上，然后由LoadBalancer随机选择一个node来转发请求，再由service将请求随机落到不同的pod上。
-<img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/loadBalancer.png" alt title="LoadBalancer的工作模式">
-`apiVersion: v1
-kind: Service
-metadata:
-name: kubia-loadbalancer
-spec:
-type: LoadBalancer
-ports:</p>
-<ul>
-<li>port: 80
-targetPort: 8080
-selector:
-app: kubia
-`</li>
-</ul>
+<img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/loadBalancer.png" alt title="LoadBalancer的工作模式"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: kubia-loadbalancer</span><br><span class="line">spec:</span><br><span class="line">  type: LoadBalancer</span><br><span class="line">  ports:</span><br><span class="line">  - port: 80</span><br><span class="line">    targetPort: 8080</span><br><span class="line">  selector:</span><br><span class="line">    app: kubia</span><br></pre></td></tr></table></figure>
 <h1>Deployment</h1>
 <p>如果手动创建了一个pod，并且该pod被调度到node上运行，kubelet就会保证这个pod一直运行下去，即使该pod的进程崩溃，kubelet也会自动重启这个pod，因此k8s里运行的app可以自愈。但是存在一个问题，如果该pod的进程出现了bug，不能正常响应（譬如出现了死锁），k8s并不能主动重启该pod。k8s可以通过心跳检测来检查pod的进程，有三种检测方法：</p>
 <ul>
@@ -569,24 +497,8 @@ app: kubia
 <li>TCP socket，只要能成功建立socket连接就说明正常，否则就重启容器</li>
 <li>在容器内部执行Exec调用，检查执行的结果值是否为0</li>
 </ul>
-<p>定义一个通过http请求做心跳检测的pod
-`
-apiVersion: v1
-kind: Pod
-metadata:
-name: kubia-liveness
-spec:
-containers:</p>
-<ul>
-<li>image: luksa/kubia-unhealthy
-name: kubia
-livenessProbe:
-httpGet:
-path: /
-port: 8080
-initialDelaySeconds: 15 # 一定要设置该值，否则在pod启动后就马上进行探测，而pod由于还未就绪就会响应失败，从而导致pod被重启
-`</li>
-</ul>
+<p>定义一个通过http请求做心跳检测的pod</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: kubia-liveness</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - image: luksa/kubia-unhealthy</span><br><span class="line">    name: kubia</span><br><span class="line">    livenessProbe:</span><br><span class="line">      httpGet:</span><br><span class="line">        path: /</span><br><span class="line">        port: 8080</span><br><span class="line">      initialDelaySeconds: 15 # 一定要设置该值，否则在pod启动后就马上进行探测，而pod由于还未就绪就会响应失败，从而导致pod被重启</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -811,7 +723,7 @@ initialDelaySeconds: 15 # 一定要设置该值，否则在pod启动后就马上
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">POD</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#端口转发"><span class="nav-number">1.1.</span> <span class="nav-text">端口转发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#label"><span class="nav-number">1.2.</span> <span class="nav-text">label</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#annotation"><span class="nav-number">1.3.</span> <span class="nav-text">annotation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">ReplicationController</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">ReplicaSet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">DaemonSet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">Job</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">6.</span> <span class="nav-text">CronJob</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">7.</span> <span class="nav-text">Service</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#nodeport"><span class="nav-number">7.1.</span> <span class="nav-text">NodePort</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#loadbalancer"><span class="nav-number">7.2.</span> <span class="nav-text">LoadBalancer</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">8.</span> <span class="nav-text">Deployment</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">POD</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#端口转发"><span class="nav-number">1.1.</span> <span class="nav-text">端口转发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#label"><span class="nav-number">1.2.</span> <span class="nav-text">label</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#annotation"><span class="nav-number">1.3.</span> <span class="nav-text">annotation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">ReplicationController</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">ReplicaSet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">DaemonSet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">Job</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">6.</span> <span class="nav-text">CronJob</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">7.</span> <span class="nav-text">Service</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#往集群里的service发送请求的几种方法："><span class="nav-number">7.1.</span> <span class="nav-text">往集群里的service发送请求的几种方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nodeport"><span class="nav-number">7.2.</span> <span class="nav-text">NodePort</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#loadbalancer"><span class="nav-number">7.3.</span> <span class="nav-text">LoadBalancer</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">8.</span> <span class="nav-text">Deployment</span></a></li></ol></div>
             
 
           </div>
