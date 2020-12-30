@@ -91,7 +91,9 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/pod%E5%B9%B6%E4%B8%8D%E4%BC%9A%E8%B7%A8node%E9%83%A8%E7%BD%B2.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/replicationcontroller.png">
-<meta property="og:updated_time" content="2020-12-24T13:51:43.974Z">
+<meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/NodePort.png">
+<meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/loadBalancer.png">
+<meta property="og:updated_time" content="2020-12-30T13:32:35.913Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s学习笔记(三) - 各种k8s元件">
 <meta name="twitter:description" content="POD 当一个pod含有多个容器时，这些容器都会部署在同一个node上，而不会跨node部署。  一个容器只能跑一个进程，一个应用由多个进程组成，所以将多个互相关联的容器放在一起组成一个pod，再由多个紧密相关的pod组成一个应用。同一个pod里的容器共享同一个namespace(包括：network,UTS,IPC,PID) 描述一个pod的yaml文件主要由3个主要的内容组成：  metada">
@@ -345,8 +347,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-24T21:51:43+08:00">
-                2020-12-24
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-30T21:32:35+08:00">
+                2020-12-30
               </time>
             
           </span>
@@ -500,6 +502,71 @@ values:
 <h1>CronJob</h1>
 <p>周期性任务
 <code>apiVersion: batch/v1beta1 kind: CronJob metadata: name: batch-job-every-fifteen-minutes spec: schedule: &quot;0,15,30,45 * * * *&quot; jobTemplate: spec: template: metadata: labels: app: periodic-batch-job spec: restartPolicy: OnFailure containers: - name: main image: luksa/batch-job</code></p>
+<h1>Service</h1>
+<p>`
+apiVersion: v1
+kind: Service
+metadata:
+name: kubia
+spec:
+ports:</p>
+<ul>
+<li>name: http     # 当一次性暴露多个端口时，需要指定name<br>
+port: 80              #对外暴露80端口<br>
+targetPort: 8080      # 将每个链接路由到其中一个pod的8080端口上</li>
+<li>name: https<br>
+port: 443<br>
+targetPort: 8443<br>
+selector:
+app: kubia
+`
+往集群里的service发送请求的几种方法：</li>
+<li></li>
+</ul>
+<p>一个service的ip可以通过curl探活，但是不能通过ping来探活，因为service的集群ip是一个虚拟ip，必须和端口结合才能使用</p>
+<p>将一个服务暴露到公网，大概有三种方法：</p>
+<ul>
+<li>将service type设置为NodePort，每一个物理机都会打开一个端口，然后将端口收到的流量重定向到第层服务中</li>
+<li>将service type设置为LoadBalancer，是NodePort的扩展版，提供四层的负载均衡</li>
+<li>创建一个Ingress资源，可以将多个不同的服务绑定到同一个IP上，工作于7层</li>
+</ul>
+<h2 id="nodeport">NodePort</h2>
+<p>从下图可以看到NodePort的工作模式，NodePort绑定了node的30123端口，当外部请求落在node的30123端口上之后，该node会转发请求到service上，由service再选择一个pod来响应。
+<img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/NodePort.png" alt title="NodePort的工作模式">
+`
+apiVersion: v1
+kind: Service
+metadata:
+name: kubia-nodeport
+spec:
+type: NodePort # 指定该service的类型是NodePort
+ports:</p>
+<ul>
+<li>port: 80
+targetPort: 8080
+nodePort: 30123
+selector:
+app: kubia
+`</li>
+</ul>
+<h2 id="loadbalancer">LoadBalancer</h2>
+<p>从下图可以看到LoadBalancer的工作模式，外部请求先落到LoadBalancer的80端口上，然后由LoadBalancer随机选择一个node来转发请求，再由service将请求随机落到不同的pod上。
+<img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/loadBalancer.png" alt title="LoadBalancer的工作模式">
+`
+apiVersion: v1
+kind: Service
+metadata:
+name: kubia-loadbalancer
+spec:
+type: LoadBalancer
+ports:</p>
+<ul>
+<li>port: 80
+targetPort: 8080
+selector:
+app: kubia
+`</li>
+</ul>
 <h1>Deployment</h1>
 <p>如果手动创建了一个pod，并且该pod被调度到node上运行，kubelet就会保证这个pod一直运行下去，即使该pod的进程崩溃，kubelet也会自动重启这个pod，因此k8s里运行的app可以自愈。但是存在一个问题，如果该pod的进程出现了bug，不能正常响应（譬如出现了死锁），k8s并不能主动重启该pod。k8s可以通过心跳检测来检查pod的进程，有三种检测方法：</p>
 <ul>
@@ -749,7 +816,7 @@ initialDelaySeconds: 15 # 一定要设置该值，否则在pod启动后就马上
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">POD</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#端口转发"><span class="nav-number">1.1.</span> <span class="nav-text">端口转发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#label"><span class="nav-number">1.2.</span> <span class="nav-text">label</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#annotation"><span class="nav-number">1.3.</span> <span class="nav-text">annotation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">ReplicationController</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">ReplicaSet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">DaemonSet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">Job</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">6.</span> <span class="nav-text">CronJob</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">7.</span> <span class="nav-text">Deployment</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">POD</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#端口转发"><span class="nav-number">1.1.</span> <span class="nav-text">端口转发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#label"><span class="nav-number">1.2.</span> <span class="nav-text">label</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#annotation"><span class="nav-number">1.3.</span> <span class="nav-text">annotation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">ReplicationController</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">ReplicaSet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">DaemonSet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">Job</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">6.</span> <span class="nav-text">CronJob</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">7.</span> <span class="nav-text">Service</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#nodeport"><span class="nav-number">7.1.</span> <span class="nav-text">NodePort</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#loadbalancer"><span class="nav-number">7.2.</span> <span class="nav-text">LoadBalancer</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">8.</span> <span class="nav-text">Deployment</span></a></li></ol></div>
             
 
           </div>
