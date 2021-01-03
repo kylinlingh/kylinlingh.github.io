@@ -340,8 +340,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-31T00:42:45+08:00">
-                2020-12-31
+              <time title="更新于" itemprop="dateModified" datetime="2021-01-03T21:57:09+08:00">
+                2021-01-03
               </time>
             
           </span>
@@ -486,6 +486,18 @@
 <img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/readniess_probe.png" alt title="readniess probe">。在service中加入就绪探针：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: ReplicationController</span><br><span class="line">...</span><br><span class="line">spec:</span><br><span class="line">  ...</span><br><span class="line">  template:</span><br><span class="line">    ...</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">      - name: kubia</span><br><span class="line">        image: luksa/kubia</span><br><span class="line">        readinessProbe:       </span><br><span class="line">          exec:               </span><br><span class="line">            command:          </span><br><span class="line">            - ls              </span><br><span class="line">            - /var/ready  # 如果文件存在，就绪探针会成功</span><br></pre></td></tr></table></figure>
 <p>注意：一定要保证使用就绪探针，否则会导致pod还未就绪时就接受到流量，从而导致Connection refused错误</p>
+<h1>Volumes</h1>
+<ul>
+<li>每一个pod里的容器都有一个独立的文件系统，因为这个文件系统来源于容器的镜像。</li>
+<li>volume的生命周期与pod一致，在pod被删除时会被销毁。</li>
+<li>html-generator容器启动时，会每隔10秒执行fortune命令，将输出定向到/var/htdocs/index.html文件中。当web-server容器启动后，会将/usr/share/nginx/html目录下的html文件当做静态页面提供访问。因为将emptyDir类型的卷挂载到了两个容器对应的目录下，所以nginx会将html-generator容器写入的文件当做静态文件提供服务。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: fortune</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - image: luksa/fortune # 第一个容器命名为html-generator，运行luksa/fortune镜像，卷命名为html，并挂载在容器的/var/htdocs里</span><br><span class="line">    name: html-generator</span><br><span class="line">    volumeMounts:</span><br><span class="line">    - name: html</span><br><span class="line">      mountPath: /var/htdocs</span><br><span class="line">  - image: nginx:alpine</span><br><span class="line">    name: web-server</span><br><span class="line">    volumeMounts:</span><br><span class="line">    - name: html</span><br><span class="line">      mountPath: /usr/share/nginx/html</span><br><span class="line">      readOnly: true</span><br><span class="line">    ports:</span><br><span class="line">    - containerPort: 80</span><br><span class="line">      protocol: TCP</span><br><span class="line">  volumes: # 一个emptyDir（不能实现持久化存储，因为pod被删除时会顺带删除卷）类型的卷，命名为html，挂载在上面的两个容器里</span><br><span class="line">  - name: html</span><br><span class="line">    emptyDir: &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>需要进行访问重定向才能从本机访问该pod：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl port-forward fortune 8080:80</span><br><span class="line">curl http://localhost:8080</span><br></pre></td></tr></table></figure>
+<ul>
+<li>需要访问node的文件系统，使用类型为hostPath的volume，可以实现持久化存储，但只有在同一个node上的pod才能共享valume。因此，千万不要在跨pods的情况下使用hostpath来存储数据。</li>
+</ul>
 <h1>Deployment</h1>
 <p>如果手动创建了一个pod，并且该pod被调度到node上运行，kubelet就会保证这个pod一直运行下去，即使该pod的进程崩溃，kubelet也会自动重启这个pod，因此k8s里运行的app可以自愈。但是存在一个问题，如果该pod的进程出现了bug，不能正常响应（譬如出现了死锁），k8s并不能主动重启该pod。k8s可以通过心跳检测来检查pod的进程，有三种检测方法：</p>
 <ul>
@@ -2020,7 +2032,7 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
