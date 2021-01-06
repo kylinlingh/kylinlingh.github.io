@@ -96,9 +96,12 @@
 <meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/ingress.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/ingress1.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/readniess_probe.png">
+<meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/%E5%8D%B7%E6%8C%82%E8%BD%BD%E7%9A%84%E7%BB%BC%E5%90%88%E5%9B%BE.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/PersistentVolume.png">
 <meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/pv.png">
-<meta property="og:updated_time" content="2021-01-04T15:39:42.539Z">
+<meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/Configmap.png">
+<meta property="og:image" content="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/Secret.png">
+<meta property="og:updated_time" content="2021-01-06T15:57:47.934Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s学习笔记(三) - 各种k8s元件">
 <meta name="twitter:description" content="POD 当一个pod含有多个容器时，这些容器都会部署在同一个node上，而不会跨node部署。  一个容器只能跑一个进程，一个应用由多个进程组成，所以将多个互相关联的容器放在一起组成一个pod，再由多个紧密相关的pod组成一个应用。同一个pod里的容器共享同一个namespace(包括：network,UTS,IPC,PID) 描述一个pod的yaml文件主要由3个主要的内容组成：  metada">
@@ -352,8 +355,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2021-01-04T23:39:42+08:00">
-                2021-01-04
+              <time title="更新于" itemprop="dateModified" datetime="2021-01-06T23:57:47+08:00">
+                2021-01-06
               </time>
             
           </span>
@@ -512,6 +515,8 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: ReplicationController</span><br><span class="line">...</span><br><span class="line">spec:</span><br><span class="line">  ...</span><br><span class="line">  template:</span><br><span class="line">    ...</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">      - name: kubia</span><br><span class="line">        image: luksa/kubia</span><br><span class="line">        readinessProbe:       </span><br><span class="line">          exec:               </span><br><span class="line">            command:          </span><br><span class="line">            - ls              </span><br><span class="line">            - /var/ready  # 如果文件存在，就绪探针会成功</span><br></pre></td></tr></table></figure>
 <p>注意：一定要保证使用就绪探针，否则会导致pod还未就绪时就接受到流量，从而导致Connection refused错误</p>
 <h1>Volumes</h1>
+<p>首先看一个卷挂载的综合图，如下图所示：
+<img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/%E5%8D%B7%E6%8C%82%E8%BD%BD%E7%9A%84%E7%BB%BC%E5%90%88%E5%9B%BE.png" alt title="卷挂载的综合图"></p>
 <ul>
 <li>每一个pod里的容器都有一个独立的文件系统，因为这个文件系统来源于容器的镜像。</li>
 <li>volume的生命周期与pod一致，在pod被删除时会被销毁。</li>
@@ -532,6 +537,18 @@
 <p>pod使用pvc:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: mongodb </span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - image: mongo</span><br><span class="line">    name: mongodb</span><br><span class="line">    volumeMounts:</span><br><span class="line">    - name: mongodb-data</span><br><span class="line">      mountPath: /data/db</span><br><span class="line">    ports:</span><br><span class="line">    - containerPort: 27017</span><br><span class="line">      protocol: TCP</span><br><span class="line">  volumes:</span><br><span class="line">  - name: mongodb-data</span><br><span class="line">    persistentVolumeClaim:       </span><br><span class="line">      claimName: mongodb-pvc  # 指定使用上面创建的pvc</span><br></pre></td></tr></table></figure>
 <p>如下图所示<img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/pv.png" alt title="pv并不属于一个namespace">，pv并不属于某个namespace。使用pv和pvc的最大好处是app开发者屏蔽了底层技术架构，只需要声明需要多少的存储空间和读写权限即可</p>
+<h2 id="configmap">ConfigMap</h2>
+<p>配置应用可以通过以下三种方法：</p>
+<ul>
+<li>通过命令行传递参数到容器中</li>
+<li>在容器里设置环境变量</li>
+<li>通过特殊卷挂载配置文件</li>
+</ul>
+<p>ConfigMap是一个独立的对象，里面存储了key value对，一个应用可以直接读取ConfigMap对象里的配置信息，也可以通过容器的环境变量来加载ConfigMap的配置信息，把不同的ConfigMap放在不同的namespace里即可实现不同环境加载不同配置文件的功能。
+<img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/Configmap.png" alt title="Configmap"></p>
+<p>使用环境变量或者命令行参数来传递配置信息的最大缺点是容器运行时无法更新配置信息，而通过挂载卷的方式使用ConfigMap则可以做到热更新，因为引用了ConfigMap的卷后，容器里的配置文件会同步更新，k8s也可以在文件更新后往容器发送对应的信号。</p>
+<h2 id="secret">Secret</h2>
+<p>Secret类似于ConfigMap，只不过一般用于保存证书，常见的场景是nginx接受https协议。每个容器会自动挂载一个名为default-token的Secret的卷，用于与k8s API server通信。<img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/Secret.png" alt title="Secret"></p>
 <h1>Deployment</h1>
 <p>如果手动创建了一个pod，并且该pod被调度到node上运行，kubelet就会保证这个pod一直运行下去，即使该pod的进程崩溃，kubelet也会自动重启这个pod，因此k8s里运行的app可以自愈。但是存在一个问题，如果该pod的进程出现了bug，不能正常响应（譬如出现了死锁），k8s并不能主动重启该pod。k8s可以通过心跳检测来检查pod的进程，有三种检测方法：</p>
 <ul>
@@ -765,7 +782,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">POD</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#端口转发"><span class="nav-number">1.1.</span> <span class="nav-text">端口转发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#label"><span class="nav-number">1.2.</span> <span class="nav-text">label</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#annotation"><span class="nav-number">1.3.</span> <span class="nav-text">annotation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">ReplicationController</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">ReplicaSet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">DaemonSet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">Job</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">6.</span> <span class="nav-text">CronJob</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">7.</span> <span class="nav-text">Service</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#往集群里的service发送请求的几种方法："><span class="nav-number">7.1.</span> <span class="nav-text">往集群里的service发送请求的几种方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nodeport"><span class="nav-number">7.2.</span> <span class="nav-text">NodePort</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#loadbalancer"><span class="nav-number">7.3.</span> <span class="nav-text">LoadBalancer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ingress"><span class="nav-number">7.4.</span> <span class="nav-text">Ingress</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">8.</span> <span class="nav-text">Volumes</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#persistentvolumes"><span class="nav-number">8.1.</span> <span class="nav-text">PersistentVolumes</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">9.</span> <span class="nav-text">Deployment</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">POD</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#端口转发"><span class="nav-number">1.1.</span> <span class="nav-text">端口转发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#label"><span class="nav-number">1.2.</span> <span class="nav-text">label</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#annotation"><span class="nav-number">1.3.</span> <span class="nav-text">annotation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">ReplicationController</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">ReplicaSet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">DaemonSet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">Job</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">6.</span> <span class="nav-text">CronJob</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">7.</span> <span class="nav-text">Service</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#往集群里的service发送请求的几种方法："><span class="nav-number">7.1.</span> <span class="nav-text">往集群里的service发送请求的几种方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nodeport"><span class="nav-number">7.2.</span> <span class="nav-text">NodePort</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#loadbalancer"><span class="nav-number">7.3.</span> <span class="nav-text">LoadBalancer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ingress"><span class="nav-number">7.4.</span> <span class="nav-text">Ingress</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">8.</span> <span class="nav-text">Volumes</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#persistentvolumes"><span class="nav-number">8.1.</span> <span class="nav-text">PersistentVolumes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#configmap"><span class="nav-number">8.2.</span> <span class="nav-text">ConfigMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#secret"><span class="nav-number">8.3.</span> <span class="nav-text">Secret</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">9.</span> <span class="nav-text">Deployment</span></a></li></ol></div>
             
 
           </div>
