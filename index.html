@@ -293,6 +293,377 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/13/2020/我的k8s社区之路/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Kylin">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/01/13/2020/我的k8s社区之路/" itemprop="url">我的k8s社区之路</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-01-13T21:06:42+08:00">
+                2021-01-13
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2021-01-16T22:02:40+08:00">
+                2021-01-16
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/k8s开发/" itemprop="url" rel="index">
+                    <span itemprop="name">k8s开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="声明">声明</h2>
+<p>k8s社区是一个人数非常庞大且流程完善的社区，我作为一个之前没有参加过其他github项目的新手，在刚开始加入社区时并没有找到很好的指导，所以才写了本文来记录自己是如何加入k8s社区的。本文的内容主要来源于两个渠道：</p>
+<ul>
+<li>k8s的官方<a href="https://github.com/kubernetes/community/tree/master/contributors/guide" target="_blank" rel="noopener">开发者指导</a></li>
+<li>youtube上的<a href="https://www.youtube.com/watch?v=-GayuFobHBo&amp;list=PL69nYSiGNLP3M5X7stuD7N4r3uP2PZQUx&amp;index=1&amp;ab_channel=Kubernetes" target="_blank" rel="noopener">new contributor workshop seattle 2018</a></li>
+</ul>
+<h2 id="注册cncf">注册CNCF</h2>
+<p>根据<a href="https://github.com/kubernetes/community/blob/master/CLA.md" target="_blank" rel="noopener">流程说明</a>注册CNCF(云原生计算基金会)账号。</p>
+<h2 id="搭建测试环境">搭建测试环境</h2>
+<p>一旦涉及到代码变更，便需要先通过单元测试，整体测试和e2e测试，所以最好在本地搭建开发环境并通过了所有测试后才提交PR。</p>
+<ul>
+<li>拉取代码：</li>
+<li>在github上的<a href="https://github.com/kubernetes/kubernetes" target="_blank" rel="noopener">k8s代码</a>fork到自己的github账户上</li>
+<li>将刚刚fork的代码clone到本地的gopath/src/k8s.io/kubernetes目录下</li>
+<li>修改完代码后，在本地运行测试：</li>
+<li>执行所有的单元测试：在kubernetes目录下执行：<code>make test</code></li>
+<li>只对某个特定的package运行单元测试： <code>make test WHAT=./pkg/kubelet # run tests for pkg/kubelet</code></li>
+<li>对特定包及其所有子包运行单元测试：<code>make test WHAT=./pkg/api/... # run tests for pkg/api and all its subpackages</code></li>
+<li>对多个子包运行单元测试：<code>make test WHAT=./pkg/{kubelet,scheduler} # run tests for pkg/kubelet and pkg/scheduler</code></li>
+</ul>
+<h2 id="加入交流群">加入交流群</h2>
+<ul>
+<li>k8s社区首选<a href="http://slack.k8s.io" target="_blank" rel="noopener">slack</a>进行交流，点击连接加入k8s的slack频道</li>
+<li><a href="https://discuss.kubernetes.io/" target="_blank" rel="noopener">网上论坛</a></li>
+<li>加入<a href="https://groups.google.com/g/kubernetes-dev" target="_blank" rel="noopener">邮件组</a></li>
+<li>zoom线上会议,<a href="https://docs.google.com/document/d/1VQDIAB0OqiSjIHI8AWMvSdceWhnz56jNpZrLs6o7NJY/edit#heading=h.lk3ecc5rt40z" target="_blank" rel="noopener">查看议程</a></li>
+</ul>
+<h2 id="github工作流程">Github工作流程</h2>
+<p><img src="/2021/01/13/2020/我的k8s社区之路/github%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.png" alt title="Github工作流程">
+强烈推荐新手在<a href="https://github.com/kubernetes-sigs/contributor-playground" target="_blank" rel="noopener">k8s游乐场</a>里按照上述的描述先体验整个github的工作流程。</p>
+<p>三种主要的PR类型：</p>
+<ul>
+<li>Bug Fix：kind/bug</li>
+<li>Enhancement: kind/feature or kind/cleanup</li>
+<li>KEP: Kubernets Enhancement Proposal</li>
+</ul>
+<p>Approval Steps:</p>
+<ul>
+<li>Submit</li>
+<li>Add labels &amp; notes</li>
+<li>Bots say the PR is ok</li>
+<li>SIGs/Owners/approve</li>
+<li>Other contributors /lgtm</li>
+<li>Tests pass</li>
+<li>Tide merges the PR</li>
+</ul>
+<h2 id="加入特别兴趣小组-sig-special-interest-group">加入特别兴趣小组(Sig: special interest group)</h2>
+<p><a href="https://github.com/kubernetes/community/blob/master/sig-list.md" target="_blank" rel="noopener">sig list</a></p>
+<h2 id="membership">membership</h2>
+<p><img src="/2021/01/13/2020/我的k8s社区之路/membership.png" alt title="k8s会员关系图">
+每一个层级的会员会给你提的PR打上不同的标签，一般一个PR需要一个lgtm和一个approver才能merge</p>
+<ul>
+<li>reviewer：lgtm(look good to me)</li>
+<li>approver: approved</li>
+</ul>
+<h2 id="label">label</h2>
+<p>在首次参与k8s社区时，可以通过以下两个标签来寻找容易上手的issue：
+<img src="/2021/01/13/2020/我的k8s社区之路/firstissue.png" alt title="第一个issue"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/12/2020/k8s学习笔记-四-k8s如何运行/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Kylin">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/01/12/2020/k8s学习笔记-四-k8s如何运行/" itemprop="url">k8s学习笔记-四-k8s如何运行</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-01-12T21:04:49+08:00">
+                2021-01-12
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2021-01-12T21:21:34+08:00">
+                2021-01-12
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/k8s学习/" itemprop="url" rel="index">
+                    <span itemprop="name">k8s学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1>k8s集群</h1>
+<p>k8s集群由两部分组成：</p>
+<ul>
+<li>K8s控制面</li>
+<li>worker node</li>
+</ul>
+<p><img src="/2021/01/12/2020/k8s学习笔记-四-k8s如何运行/k8s_component.png" alt title="k8s_component.png"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -340,8 +711,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2021-01-06T23:57:47+08:00">
-                2021-01-06
+              <time title="更新于" itemprop="dateModified" datetime="2021-01-11T21:25:47+08:00">
+                2021-01-11
               </time>
             
           </span>
@@ -410,6 +781,14 @@
 </ul>
 <p>一份简单的yaml文件：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: nginx-manual</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - image: nginx:1.8</span><br><span class="line">    name: nginx</span><br><span class="line">    ports:</span><br><span class="line">    - containerPort: 80</span><br><span class="line">      protocol: TCP</span><br></pre></td></tr></table></figure>
+<p>如果手动创建了一个pod，并且该pod被调度到node上运行，kubelet就会保证这个pod一直运行下去，即使该pod的进程崩溃，kubelet也会自动重启这个pod，因此k8s里运行的app可以自愈。但是存在一个问题，如果该pod的进程出现了bug，不能正常响应（譬如出现了死锁），k8s并不能主动重启该pod。k8s可以通过心跳检测来检查pod的进程，有三种检测方法：</p>
+<ul>
+<li>HTTP Get请求，返回值为2xx或3xx就正常，否则就重启容器</li>
+<li>TCP socket，只要能成功建立socket连接就说明正常，否则就重启容器</li>
+<li>在容器内部执行Exec调用，检查执行的结果值是否为0</li>
+</ul>
+<p>定义一个通过http请求做心跳检测的pod</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: kubia-liveness</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - image: luksa/kubia-unhealthy</span><br><span class="line">    name: kubia</span><br><span class="line">    livenessProbe:</span><br><span class="line">      httpGet:</span><br><span class="line">        path: /</span><br><span class="line">        port: 8080</span><br><span class="line">      initialDelaySeconds: 15 # 一定要设置该值，否则在pod启动后就马上进行探测，而pod由于还未就绪就会响应失败，从而导致pod被重启</span><br></pre></td></tr></table></figure>
 <h2 id="端口转发">端口转发</h2>
 <p>当你想与pod通信，而又不想通过service的方式，k8s允许使用<code>kubectl port-forward</code>命令，下面的命令可以将机器的本地8888端口转发到pod的8080端口上：
 <code>kubectl port-forward {pod-name} 8888:8080</code></p>
@@ -521,15 +900,14 @@
 <p>使用环境变量或者命令行参数来传递配置信息的最大缺点是容器运行时无法更新配置信息，而通过挂载卷的方式使用ConfigMap则可以做到热更新，因为引用了ConfigMap的卷后，容器里的配置文件会同步更新，k8s也可以在文件更新后往容器发送对应的信号。</p>
 <h2 id="secret">Secret</h2>
 <p>Secret类似于ConfigMap，只不过一般用于保存证书，常见的场景是nginx接受https协议。每个容器会自动挂载一个名为default-token的Secret的卷，用于与k8s API server通信。<img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/Secret.png" alt title="Secret"></p>
-<h1>Deployment</h1>
-<p>如果手动创建了一个pod，并且该pod被调度到node上运行，kubelet就会保证这个pod一直运行下去，即使该pod的进程崩溃，kubelet也会自动重启这个pod，因此k8s里运行的app可以自愈。但是存在一个问题，如果该pod的进程出现了bug，不能正常响应（譬如出现了死锁），k8s并不能主动重启该pod。k8s可以通过心跳检测来检查pod的进程，有三种检测方法：</p>
-<ul>
-<li>HTTP Get请求，返回值为2xx或3xx就正常，否则就重启容器</li>
-<li>TCP socket，只要能成功建立socket连接就说明正常，否则就重启容器</li>
-<li>在容器内部执行Exec调用，检查执行的结果值是否为0</li>
-</ul>
-<p>定义一个通过http请求做心跳检测的pod</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: kubia-liveness</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - image: luksa/kubia-unhealthy</span><br><span class="line">    name: kubia</span><br><span class="line">    livenessProbe:</span><br><span class="line">      httpGet:</span><br><span class="line">        path: /</span><br><span class="line">        port: 8080</span><br><span class="line">      initialDelaySeconds: 15 # 一定要设置该值，否则在pod启动后就马上进行探测，而pod由于还未就绪就会响应失败，从而导致pod被重启</span><br></pre></td></tr></table></figure>
+<h2 id="downward">Downward</h2>
+<p>将pod的信息传递到容器上，在pod被创建之前，可以通过configmap和secret 卷来往应用传递配置数据。但是在传递一些pod的动态数据，如pod ip，node name等，就需要k8s 的downward API。
+<img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/downard.png" alt title="downward api"></p>
+<h2 id="kube-proxy">kube-proxy</h2>
+<p><code>kubectl proxy</code>命令运行了一个proxy server，可以在本机接受http连接，然后转化为https请求到API server。</p>
+<h2 id="deployment">Deployment</h2>
+<p>如下图所示，Deployment的底层是ReplicaSet，一个Deployment可能运行着多个不同版本的pod，所以不需要指定app的版本号
+<img src="/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/deployment.png" alt title="Deployment的底层是ReplicaSet"></p>
 
           
         
@@ -1971,7 +2349,7 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1982,7 +2360,7 @@ int nlmsg_type, int payload, int nlmsg_flags);</p>
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>

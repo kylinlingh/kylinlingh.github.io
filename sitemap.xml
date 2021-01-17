@@ -2,16 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yoursite.com/2020/12/15/2020/k8s%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C-Docker%E5%92%8Ck8s%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</loc>
+    <loc>http://yoursite.com/2021/01/13/2020/%E6%88%91%E7%9A%84k8s%E7%A4%BE%E5%8C%BA%E4%B9%8B%E8%B7%AF/</loc>
     
-    <lastmod>2021-01-06T15:59:04.578Z</lastmod>
+    <lastmod>2021-01-16T14:02:40.033Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2021/01/12/2020/k8s%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%9B%9B-k8s%E5%A6%82%E4%BD%95%E8%BF%90%E8%A1%8C/</loc>
+    
+    <lastmod>2021-01-12T13:21:34.628Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://yoursite.com/2020/12/17/2020/k8s%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89-%E5%90%84%E7%A7%8Dk8s%E5%85%83%E4%BB%B6/</loc>
     
-    <lastmod>2021-01-06T15:57:47.934Z</lastmod>
+    <lastmod>2021-01-11T13:25:47.286Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/12/15/2020/k8s%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C-Docker%E5%92%8Ck8s%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</loc>
+    
+    <lastmod>2021-01-06T15:59:04.578Z</lastmod>
     
   </url>
   

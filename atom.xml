@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2021-01-06T15:57:47.934Z</updated>
+  <updated>2021-01-16T14:02:40.033Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,11 +17,65 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>我的k8s社区之路</title>
+    <link href="http://yoursite.com/2021/01/13/2020/%E6%88%91%E7%9A%84k8s%E7%A4%BE%E5%8C%BA%E4%B9%8B%E8%B7%AF/"/>
+    <id>http://yoursite.com/2021/01/13/2020/我的k8s社区之路/</id>
+    <published>2021-01-13T13:06:42.000Z</published>
+    <updated>2021-01-16T14:02:40.033Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;声明&quot;&gt;声明&lt;/h2&gt;
+&lt;p&gt;k8s社区是一个人数非常庞大且流程完善的社区，我作为一个之前没有参加过其他github项目的新手，在刚开始加入社区时并没有找到很好的指导，所以才写了本文来记录自己是如何加入k8s社区的。本文的内容主要来源于两个渠道：&lt;/p&gt;
+&lt;ul&gt;
+      
+    
+    </summary>
+    
+      <category term="k8s开发" scheme="http://yoursite.com/categories/k8s%E5%BC%80%E5%8F%91/"/>
+    
+    
+      <category term="k8s" scheme="http://yoursite.com/tags/k8s/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>k8s学习笔记-四-k8s如何运行</title>
+    <link href="http://yoursite.com/2021/01/12/2020/k8s%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%9B%9B-k8s%E5%A6%82%E4%BD%95%E8%BF%90%E8%A1%8C/"/>
+    <id>http://yoursite.com/2021/01/12/2020/k8s学习笔记-四-k8s如何运行/</id>
+    <published>2021-01-12T13:04:49.000Z</published>
+    <updated>2021-01-12T13:21:34.628Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;k8s集群&lt;/h1&gt;
+&lt;p&gt;k8s集群由两部分组成：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;K8s控制面&lt;/li&gt;
+&lt;li&gt;worker node&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;/2021/01/12/2020/k8s学习笔记-四-k8s如何运行/k8s_compo
+      
+    
+    </summary>
+    
+      <category term="k8s学习" scheme="http://yoursite.com/categories/k8s%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="k8s" scheme="http://yoursite.com/tags/k8s/"/>
+    
+  </entry>
+  
+  <entry>
     <title>k8s学习笔记(三) - 各种k8s元件</title>
     <link href="http://yoursite.com/2020/12/17/2020/k8s%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89-%E5%90%84%E7%A7%8Dk8s%E5%85%83%E4%BB%B6/"/>
     <id>http://yoursite.com/2020/12/17/2020/k8s学习笔记-三-各种k8s元件/</id>
     <published>2020-12-17T13:52:41.000Z</published>
-    <updated>2021-01-06T15:57:47.934Z</updated>
+    <updated>2021-01-11T13:25:47.286Z</updated>
     
     <summary type="html">
     
