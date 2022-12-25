@@ -3,11 +3,11 @@
   <title>安全小屋</title>
   
   <subtitle>计算机技术笔记/安全产品设计理念/个人感悟</subtitle>
-  <link href="http://example.com/atom.xml" rel="self"/>
+  <link href="https://kylinlingh.github.io/atom.xml" rel="self"/>
   
-  <link href="http://example.com/"/>
+  <link href="https://kylinlingh.github.io/"/>
   <updated>2022-12-25T13:45:24.964Z</updated>
-  <id>http://example.com/</id>
+  <id>https://kylinlingh.github.io/</id>
   
   <author>
     <name>kylinlin</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>hexo使用手册</title>
-    <link href="http://example.com/2022/12/25/hexo%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/"/>
-    <id>http://example.com/2022/12/25/hexo%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/</id>
+    <link href="https://kylinlingh.github.io/2022/12/25/hexo%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/"/>
+    <id>https://kylinlingh.github.io/2022/12/25/hexo%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/</id>
     <published>2022-12-25T13:43:16.000Z</published>
     <updated>2022-12-25T13:45:24.964Z</updated>
     
