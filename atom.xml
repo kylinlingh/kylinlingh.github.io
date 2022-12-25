@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>安全小屋</title>
+  
+  
+  <link href="http://example.com/atom.xml" rel="self"/>
+  
+  <link href="http://example.com/"/>
+  <updated>2022-12-25T13:45:24.964Z</updated>
+  <id>http://example.com/</id>
+  
+  <author>
+    <name>kylinlin</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>hexo使用手册</title>
+    <link href="http://example.com/2022/12/25/hexo%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/"/>
+    <id>http://example.com/2022/12/25/hexo%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/</id>
+    <published>2022-12-25T13:43:16.000Z</published>
+    <updated>2022-12-25T13:45:24.964Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="操作命令"><a href="#操作命令" class="headerlink" title="操作命令"></a>操作命令</h1><p>生成搜索图</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">source ~/.bash_profile</span><br><span class="line">hexo algolia</span><br></pre></td></tr></table></figure><h1 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">title: xxxx</span><br><span class="line">tags:</span><br><span class="line">  - xxx</span><br><span class="line">date: 2018-08-08 08:08:08</span><br><span class="line">top: True  #文章置顶</span><br><span class="line">---</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;操作命令&quot;&gt;&lt;a href=&quot;#操作命令&quot; class=&quot;headerlink&quot; title=&quot;操作命令&quot;&gt;&lt;/a&gt;操作命令&lt;/h1&gt;&lt;p&gt;生成搜索图&lt;/p&gt;
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td c</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+</feed>
