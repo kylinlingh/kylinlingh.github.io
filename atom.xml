@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>安全小屋</title>
   
-  
+  <subtitle>计算机技术笔记/安全产品设计理念/个人感悟</subtitle>
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
