@@ -1,6 +1,5 @@
 https://kylinlingh.github.io/2022/12/27/%E4%BC%81%E4%B8%9ADevSecOps%E6%B5%81%E7%A8%8B%E5%BB%BA%E8%AE%BE%E4%B9%8B%E5%B7%A5%E5%85%B7%E7%AF%87/
 https://kylinlingh.github.io/aboutme/index.html
-https://kylinlingh.github.io/2022/12/25/hexo%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/
 https://kylinlingh.github.io/404.html
 https://kylinlingh.github.io/categories/index.html
 https://kylinlingh.github.io/tags/index.html

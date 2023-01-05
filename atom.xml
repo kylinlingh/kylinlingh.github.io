@@ -48,24 +48,4 @@
     
   </entry>
   
-  <entry>
-    <title>hexo使用手册</title>
-    <link href="https://kylinlingh.github.io/2022/12/25/hexo%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/"/>
-    <id>https://kylinlingh.github.io/2022/12/25/hexo%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/</id>
-    <published>2022-12-25T13:43:16.000Z</published>
-    <updated>2022-12-27T00:54:36.662Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="操作命令"><a href="#操作命令" class="headerlink" title="操作命令"></a>操作命令</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成搜索图</span></span><br><span class="line">source ~/.bash_profile</span><br><span class="line">hexo algolia</span><br></pre></td></tr></table></figure><h2 id="草稿的使用方法"><a href="#草稿的使用方法" class="headerlink" title="草稿的使用方法"></a>草稿的使用方法</h2><p><a href="https://programmerauthor.github.io/2020/01/13/hexo-draft/">本节内容引用自此：Hexo草稿布局(draft)的使用</a></p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo new draft &lt;title&gt;</span><br></pre></td></tr></table></figure><p>使用 draft 布局建立的文章，其博客文章 md 源码位于 source/_drafts 路径下， hexo generate 不会将其编译到 public 目录下，所以 hexo deploy 也不会将其部署发布到博客网站上。</p><p>当我们写完整篇博客文章时，可以将草稿发布为正式文章，hexo 会将发布为正式文章的草稿文章源码从 source/_drafts 路径下，移到 source/_posts 下，这样就转成了正式文章，简单明了效果好。</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将草稿发布为正式文章的命令</span></span><br><span class="line">hexo publish &lt;filename&gt;</span><br></pre></td></tr></table></figure><p>hexo generate 不会编译 source/_drafts 目录下的文章，但是我们编写博客文章的过程中，可能需要查看预览，所以 hexo 也提供了预览草稿文章的方法。</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">hexo 预览草稿的命令</span></span><br><span class="line">hexo S --draft</span><br></pre></td></tr></table></figure><h1 id="文章头"><a href="#文章头" class="headerlink" title="文章头"></a>文章头</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">title: xxxx</span><br><span class="line">tags: # 标签</span><br><span class="line">  - tag1</span><br><span class="line">  - tag2</span><br><span class="line">categories: # 分类</span><br><span class="line">  - categorie</span><br><span class="line">date: 2018-08-08 08:08:08</span><br><span class="line">top: True  #文章置顶</span><br><span class="line">---</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;操作命令&quot;&gt;&lt;a href=&quot;#操作命令&quot; class=&quot;headerlink&quot; title=&quot;操作命令&quot;&gt;&lt;/a&gt;操作命令&lt;/h1&gt;&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
 </feed>
