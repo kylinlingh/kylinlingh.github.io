@@ -6,7 +6,7 @@
   <link href="https://kylinlingh.github.io/atom.xml" rel="self"/>
   
   <link href="https://kylinlingh.github.io/"/>
-  <updated>2023-01-29T08:41:17.081Z</updated>
+  <updated>2023-01-31T02:33:43.307Z</updated>
   <id>https://kylinlingh.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>2023年总结</title>
+    <link href="https://kylinlingh.github.io/2023/01/31/2023%E5%B9%B4%E6%80%BB%E7%BB%93/"/>
+    <id>https://kylinlingh.github.io/2023/01/31/2023%E5%B9%B4%E6%80%BB%E7%BB%93/</id>
+    <published>2023-01-30T16:00:00.000Z</published>
+    <updated>2023-01-31T02:33:43.307Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="开源项目开发"><a href="#开源项目开发" class="headerlink" title="开源项目开发"></a>开源项目开发</h1><ul><li>复现AWS的IAM系统</li></ul><h1 id="经济分析"><a href="#经济分析" class="headerlink" title="经济分析"></a>经济分析</h1><ul><li>美股的基本面分析</li><li>阅读分析财报100份</li></ul><h1 id="阅读"><a href="#阅读" class="headerlink" title="阅读"></a>阅读</h1><p>计划阅读书单：</p><ul><li>《置身事内：中国政府与经济发展》</li><li>《财报就像一本故事书》</li><li>《贝佐斯致股东的信》</li><li>《巴菲特致股东的信》</li><li>《心里突破：审判中的心理学原理与方法》</li><li>《货币金融学》</li><li>《货币战争》</li><li>《当下的力量》</li><li>《反脆弱：从不确定性中获益》</li><li>《系统之美：决策者的系统思考》</li></ul><p>阅读进度：</p><ul><li>1月：<ul><li>《当下的力量》：完成</li><li>《财报就像一本故事书》：50%</li></ul></li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;开源项目开发&quot;&gt;&lt;a href=&quot;#开源项目开发&quot; class=&quot;headerlink&quot; title=&quot;开源项目开发&quot;&gt;&lt;/a&gt;开源项目开发&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;复现AWS的IAM系统&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;经济分析&quot;&gt;&lt;a href=&quot;#经</summary>
+      
+    
+    
+    
+    <category term="个人感悟" scheme="https://kylinlingh.github.io/categories/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F/"/>
+    
+    
+    <category term="个人感悟" scheme="https://kylinlingh.github.io/tags/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F/"/>
+    
+  </entry>
   
   <entry>
     <title>企业账号安全体系建设之单点登录系统设计</title>
