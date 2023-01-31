@@ -6,10 +6,10 @@ https://kylinlingh.github.io/404.html
 https://kylinlingh.github.io/categories/index.html
 https://kylinlingh.github.io/tags/index.html
 https://kylinlingh.github.io/
+https://kylinlingh.github.io/tags/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F/
 https://kylinlingh.github.io/tags/DevSecOps/
 https://kylinlingh.github.io/tags/%E4%BE%9D%E8%B5%96%E6%A3%80%E6%B5%8B/
 https://kylinlingh.github.io/tags/SSO/
 https://kylinlingh.github.io/tags/%E8%B4%A6%E5%8F%B7%E5%AE%89%E5%85%A8/
-https://kylinlingh.github.io/tags/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F/
-https://kylinlingh.github.io/categories/%E5%AE%89%E5%85%A8%E5%BB%BA%E8%AE%BE%E6%80%9D%E8%B7%AF/
 https://kylinlingh.github.io/categories/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F/
+https://kylinlingh.github.io/categories/%E5%AE%89%E5%85%A8%E5%BB%BA%E8%AE%BE%E6%80%9D%E8%B7%AF/
