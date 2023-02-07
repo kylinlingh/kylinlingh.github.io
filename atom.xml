@@ -42,6 +42,32 @@
   </entry>
   
   <entry>
+    <title>企业账号安全体系建设之双因素认证系统设计</title>
+    <link href="https://kylinlingh.github.io/2023/01/17/%E4%BC%81%E4%B8%9A%E8%B4%A6%E5%8F%B7%E5%AE%89%E5%85%A8%E4%BD%93%E7%B3%BB%E5%BB%BA%E8%AE%BE%E4%B9%8B%E5%8F%8C%E5%9B%A0%E7%B4%A0%E8%AE%A4%E8%AF%81%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/"/>
+    <id>https://kylinlingh.github.io/2023/01/17/%E4%BC%81%E4%B8%9A%E8%B4%A6%E5%8F%B7%E5%AE%89%E5%85%A8%E4%BD%93%E7%B3%BB%E5%BB%BA%E8%AE%BE%E4%B9%8B%E5%8F%8C%E5%9B%A0%E7%B4%A0%E8%AE%A4%E8%AF%81%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/</id>
+    <published>2023-01-17T12:49:05.000Z</published>
+    <updated>2023-02-07T14:34:46.599Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="双因素身份认证-2FA"><a href="#双因素身份认证-2FA" class="headerlink" title="双因素身份认证(2FA)"></a>双因素身份认证(2FA)</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>所谓的双因素，就是在系统登录的时候除了证明你是谁之外（输入你的账号密码），还需要证明你拥有什么（输入验证码）。双因素认证能极大地提高用户的账号安全水平，因为在今天数据泄漏事件层出不穷的情况下，攻击者窃取用户的账号密码是比较容易的，但是攻击者要同时窃取用户的登录设备（一般是手机）就非常困难了。</p><p>这个验证码被称为 OTP(One-Time Password，一次性密码)，是通过在客户端和服务端共享密钥来实现的，有两个实现方法：</p><ol><li>HOTP (HMAC-Based One-Time Password Algorithm)，是基于 HMAC 算法生成的一次性密码，也称<strong>事件同步</strong>的动态密码。实现规范是 <a href="https://www.rfc-editor.org/rfc/rfc4226">RFC 4226</a> ，对应的计算公式：</li></ol><figure class="highlight text"><table><tr><td class="code"><pre><span class="line">HOTP(K,C) = Truncate(HMAC-SHA-1(K,C))</span><br><span class="line">K：客户端和服务器事先协商好的一个密钥K</span><br><span class="line">C：客户端和服务器各有一个事件计数器C，并且事先将计数值同步</span><br><span class="line">Truncate：将HMAC-SHA-1产生的20字节的字符串转换为若干位十进制数字的算法</span><br></pre></td></tr></table></figure><ol start="2"><li>TOTP (Time-Based One-Time Password Algorithm)，是 OTP 的算法变种，使用当前时间替换掉 HOTP 的事件计数器 C，也称<strong>时间同步</strong>的动态密码。实现规范是 <a href="https://www.rfc-editor.org/rfc/rfc6238">RFC 6238</a> （<strong>注意：该RFC包含了服务端的源码，需要仔细研究</strong>），对应的计算公式：</li></ol><figure class="highlight text"><table><tr><td class="code"><pre><span class="line">TOTP = Truncate(HMAC-SHA-1(K,T))</span><br><span class="line"></span><br><span class="line">T = (当前的Unix格式时间戳 - T0) / X</span><br><span class="line">T0 是初试时间，默认为 0</span><br><span class="line">X 是时间步长，默认30秒</span><br><span class="line">官方文档中的例子：假设当前unix时间=59，T0=0，X=30，则T=1；假设当前unix时间=60，T0=0，X=30，则T=2</span><br><span class="line">也就是对T的值向下取整</span><br></pre></td></tr></table></figure><p>只要保证客户端与服务端的时间一致，TOTP 就能根据同一个密钥种子分别在两端计算出同一个验证码，所以生成验证码的时候是完全不依赖网络的。针对 TOTP 的攻击只有针对共享密钥的暴力穷举法，因此防护重点在于共享密钥<a href="#refer-anchor"><sup>[1]</sup></a>：</p><ul><li>密钥生成算法必须采用真随机数或者是用加密强度高的伪随机数生成算法</li><li>客户端与服务端沟通密钥时必须使用安全的传输方法，譬如 IPsec 隧道或是基于 SSL/TLS 的通信协议</li><li>密钥需要加密落盘，只在验证随机码的时候短暂解密，然后再重新加密罗盘，缩短在内存中暴露的时间</li><li>密钥需要存储在安全的地方并限制只有验证系统可以访问</li></ul><h2 id="产品"><a href="#产品" class="headerlink" title="产品"></a>产品</h2><p>TOTP 的生成算法/源码是公开的，所以并不存在服务端产品，下面的两个产品指的是用于扫描二维码的移动端应用，都支持 android 和 ios。</p><ul><li><a href="https://www.microsoft.com/zh-cn/security/mobile-authenticator-app">微软</a></li><li><a href="">谷歌</a>，在github上开源了客户端的源码：<a href="https://github.com/google/google-authenticator-android">google-authenticator-android</a></li></ul><h2 id="系统场景设计"><a href="#系统场景设计" class="headerlink" title="系统场景设计"></a>系统场景设计</h2><p>场景一：用户在登录系统时，浏览器弹出二维码，用户扫码后再输入验证码：<a href="#refer-anchor"><sup>[2]</sup></a></p><p><img src="https://hexo-pic-1300331708.cos.ap-guangzhou.myqcloud.com/2023-01-13-10-56-39.png"></p><p>场景二：用户在登录系统时，直接打开企业微信或其他内部开发的移动端应用，该应用上自动生成验证码，用户输入该验证码即可</p><p><img src="https://hexo-pic-1300331708.cos.ap-guangzhou.myqcloud.com/2023-01-13-11-17-10.png"></p><h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><div id="refer-anchor"></div><p>[1] <a href="https://www.rfc-editor.org/rfc/rfc6238">TOTP: Time-Based One-Time Password Algorithm</a><br>[2] <a href="https://juejin.cn/post/7142687165095346207">nodejs 接入 google 身份验证器（authenticator）</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;双因素身份认证-2FA&quot;&gt;&lt;a href=&quot;#双因素身份认证-2FA&quot; class=&quot;headerlink&quot; title=&quot;双因素身份认证(2FA)&quot;&gt;&lt;/a&gt;双因素身份认证(2FA)&lt;/h1&gt;&lt;h2 id=&quot;概念&quot;&gt;&lt;a href=&quot;#概念&quot; class=&quot;he</summary>
+      
+    
+    
+    
+    <category term="安全建设思路" scheme="https://kylinlingh.github.io/categories/%E5%AE%89%E5%85%A8%E5%BB%BA%E8%AE%BE%E6%80%9D%E8%B7%AF/"/>
+    
+    
+    <category term="账号安全" scheme="https://kylinlingh.github.io/tags/%E8%B4%A6%E5%8F%B7%E5%AE%89%E5%85%A8/"/>
+    
+    <category term="双因素认证" scheme="https://kylinlingh.github.io/tags/%E5%8F%8C%E5%9B%A0%E7%B4%A0%E8%AE%A4%E8%AF%81/"/>
+    
+  </entry>
+  
+  <entry>
     <title>企业账号安全体系建设之单点登录系统设计</title>
     <link href="https://kylinlingh.github.io/2022/10/17/%E4%BC%81%E4%B8%9A%E8%B4%A6%E5%8F%B7%E5%AE%89%E5%85%A8%E4%BD%93%E7%B3%BB%E5%BB%BA%E8%AE%BE%E4%B9%8B%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/"/>
     <id>https://kylinlingh.github.io/2022/10/17/%E4%BC%81%E4%B8%9A%E8%B4%A6%E5%8F%B7%E5%AE%89%E5%85%A8%E4%BD%93%E7%B3%BB%E5%BB%BA%E8%AE%BE%E4%B9%8B%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/</id>
