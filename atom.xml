@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>安全屋</title>
+  <title>LGH&#39;s Blog</title>
   
-  <subtitle>Building a zero trust system from ground zero.</subtitle>
+  <subtitle>博学 审问 慎思 明辨 笃行</subtitle>
   <link href="https://kylinlingh.github.io/atom.xml" rel="self"/>
   
   <link href="https://kylinlingh.github.io/"/>
