@@ -38,7 +38,7 @@
 <li><a target="_blank" rel="noopener" href="https://github.com/authzed/spicedb">authzed/spicedb</a>：Open Source, Google Zanzibar-inspired fine-grained permissions database：完成70%（至 2023 年 8 月）</li>
 </ul>
 <blockquote>
-<p> 个人评价：质量非常高的项目，尤其是高并发的设计，通过哈希环将要缓存的内容分布到不同的机器上，然后通过调度器先计算请求的哈希值，接着根据哈希值将不同的请求调度到不同的机器（该机器会缓存要请求的资源）上，从而实现了分布式缓存。并且没有引入 redis 或 dcache 等组件，可以减少对上下游的依赖。另一方面，对权限 schema 的描述也非常牛逼，可以用非常复杂的语言（权限的交集，并集等）去描述一个权限。本人觉得这个项目是 IAM 系统的不二之选</p>
+<p> 个人评价：质量非常高的项目，尤其是高并发的设计，通过哈希环将要缓存的内容分布到不同的机器上，然后通过调度器先计算请求的哈希值，接着根据哈希值将不同的请求调度到不同的机器（该机器会缓存要请求的资源）上，从而实现了分布式缓存。并且没有引入 redis 或 dcache 等组件，可以减少对上下游的依赖。另一方面，对权限 schema 的描述也非常牛逼，可以用非常复杂的语言（权限的交集，并集等）去描述一个权限。另外，也是通过该项目，才学习到了很多 k8s 的基础知识。本人觉得这个项目是 IAM 系统的不二之选</p>
 </blockquote>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/go-kiss/sniper">go-kiss/sniper</a>:轻量级 go 业务框架（进行中）</li>
